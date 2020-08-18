@@ -24,7 +24,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title='小楼的blog',
         default_version="v1",
-        description="小楼de破栈"
+        description="小楼的破栈"
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),

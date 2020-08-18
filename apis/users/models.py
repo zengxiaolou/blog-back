@@ -8,6 +8,8 @@ class UserProfile(AbstractUser):
     用户信息
     """
     avatar = models.CharField(max_length=300, verbose_name="头像")
+    mobile = models.CharField(max_length=11, verbose_name="手机号")
+    github = models.CharField(max_length=50, verbose_name="github账号")
 
     def __str__(self):
         return self.username
