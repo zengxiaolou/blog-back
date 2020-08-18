@@ -7,3 +7,8 @@ class UserProfile(AbstractUser):
     """
     用户信息
     """
+    avatar = models.CharField(max_length=300, verbose_name="头像")
+
+    def __str__(self):
+        return self.username
+
