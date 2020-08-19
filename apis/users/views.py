@@ -12,5 +12,5 @@ User = get_user_model()
 class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,viewsets.GenericViewSet):
     """用户相关"""
     queryset = User.objects.all()
-    serializers_class = UserSerializer()
+    serializer_class = UserSerializer
 
