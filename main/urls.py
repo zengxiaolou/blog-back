@@ -33,4 +33,5 @@ schema_view = get_schema_view(
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^api/(?P<version>[v1|v2]+)/user/', include('apis.users.urls')),
 ]
