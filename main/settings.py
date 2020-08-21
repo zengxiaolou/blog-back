@@ -239,3 +239,10 @@ SWAGGER_SETTINGS = {
       }
    }
 }
+
+
+# 七牛云设置
+# 需要填写你的Access_key 和 Secret_key
+ACCESS_KEY = '3hbl1YOcVTeyYsHOxvT73OpT-zK5jRBPda8tgCv_'
+SECRET_KEY = 'TWYbwJ9Y07XNCu0BB7d-6Ek1u5qHEe8D9uWD2DHU'
+BUCKET_NAME = 'messstack01'
