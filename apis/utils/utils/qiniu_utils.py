@@ -6,7 +6,7 @@ TIME:           2020/8/21-15:29
 INSTRUCTIONS:   七牛token
 """
 
-from qiniu import Auth
+from qiniu import Auth, put_file
 import qiniu.config
 from main.settings import ACCESS_KEY, SECRET_KEY, BUCKET_NAME
 

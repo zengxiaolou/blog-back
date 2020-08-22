@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAdminUser
 from main.settings import SECRET_KEY, ACCESS_KEY, BUCKET_NAME
 
 from .serializers import *
-from .utils.qiniu_utils import q
+from .utils.qiniu_utils import q, put_file
 
 
 class CheckCaptcha(APIView):
@@ -36,10 +36,12 @@ class GetQiNiuToken(APIView):
         if serializer.is_valid():
             tokens = []
             for i in serializer.validated_data['name']:
-                token = q.upload_token(BUCKET_NAME, serializer.validated_data['name'], 3600)
+                token = q.upload_token(BUCKET_NAME, i, 3600)
                 tokens.append(token)
+            # ret, info = put_file(token, "不知火.jpg", '/Users/ruler/Pictures/pap.er/妖刀.jpg')
+            # print(info)
             data = {
-                "token": token
+                "token": tokens
             }
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
