@@ -34,14 +34,9 @@ class GetQiNiuToken(APIView):
     def post(self, request, *args, **kwargs):
         serializer = QiNiuUploadSerializer(data=request.data)
         if serializer.is_valid():
-            tokens = []
-            for i in serializer.validated_data['name']:
-                token = q.upload_token(BUCKET_NAME, i, 3600)
-                tokens.append(token)
-            # ret, info = put_file(token, "不知火.jpg", '/Users/ruler/Pictures/pap.er/妖刀.jpg')
-            # print(info)
+            token = q.upload_token(BUCKET_NAME, serializer.validated_data['name'], 3600)
             data = {
-                "token": tokens
+                "token": token
             }
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
