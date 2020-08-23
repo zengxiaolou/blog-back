@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'drf_yasg',
-    'django_filters'
+    'django_filters',
+    'django_elasticseach_dsl',
+    'django_elasticseach_dsl_drf',
 ]
 
 MIDDLEWARE = [
@@ -246,3 +248,16 @@ SWAGGER_SETTINGS = {
 ACCESS_KEY = '3hbl1YOcVTeyYsHOxvT73OpT-zK5jRBPda8tgCv_'
 SECRET_KEY = 'TWYbwJ9Y07XNCu0BB7d-6Ek1u5qHEe8D9uWD2DHU'
 BUCKET_NAME = 'messstack01'
+
+# haystack 配置----全文搜素
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://0.0.0.0.0:9200/',  # 此处为elasticsearch运行的服务器ip地址，端口号固定为9200
+        'INDEX_NAME': 'blog',  # 指定elasticsearch建立的索引库的名称
+    },
+}
+
+
+# 当添加、修改、删除数据时，自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
