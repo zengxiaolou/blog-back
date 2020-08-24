@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'django_filters',
-    'django_elasticseach_dsl',
-    'django_elasticseach_dsl_drf',
+    # 'django_elasticseach_dsl',
+    # 'django_elasticseach_dsl_drf',
 ]
 
 MIDDLEWARE = [
