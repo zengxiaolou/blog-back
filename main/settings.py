@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'django_filters',
+    'extract_apps.drf_haystack',
+    'extract_apps.rest_captcha'
     # 'django_elasticseach_dsl',
     # 'django_elasticseach_dsl_drf',
 ]
