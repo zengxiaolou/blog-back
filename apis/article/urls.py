@@ -5,15 +5,17 @@ EMAIL:          zengevent@gmail.com
 TIME:           2020/8/24-18:20
 INSTRUCTIONS:   文件简介
 """
+
 from django.conf.urls import url, include
-from rest_framework import routers
+from rest_framework.routers import DefaultRouter
 
-from .views import ArticleSearchView
+from .views import ArticleDocumentView, AddArticleViewSet
 
-router = routers.DefaultRouter()
+router = DefaultRouter()
 
-router.register("search", ArticleSearchView, basename="search")
+router.register('search', ArticleDocumentView, basename='search')
 
 urlpatterns = [
-    url('^search/', include(router.urls)),
+    url(r'^', include(router.urls)),
+    url(r'^add/$', AddArticleViewSet.as_view()),
 ]
