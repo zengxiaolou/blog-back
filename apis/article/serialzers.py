@@ -28,4 +28,4 @@ class AddArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('title', 'content', 'cover', 'summary')
+        fields = ('title', 'content', 'cover', 'summary', 'created')
