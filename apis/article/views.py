@@ -31,11 +31,11 @@ class AddArticleViewSet(APIView):
     def post(self, request, *args, **kwargs):
         serializer = AddArticleSerializer(data=request.data)
         if serializer.is_valid():
-            title = serializer.validated_data['title']
-            cover = serializer.validated_data['cover']
-            content = serializer.validated_data['content']
-            summary = serializer.validated_data['summary']
-            article = ArticleDocument(title=title, cover=cover, content=content, summary=summary)
+            data = serializer.validated_data
+            temp = {}
+            for k, v in data.items():
+                temp[k] = v
+            article = ArticleDocument(temp)
             article.save()
             data = {
                 "msg": "添加成功"

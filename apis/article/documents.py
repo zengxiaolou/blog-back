@@ -23,16 +23,16 @@ INDEX.settings(
 
 @INDEX.doc_type
 class ArticleDocument(Document):
-    id = fields.IntegerField(attr='id')
-    title = fields.TextField(attr='title')
-    cover = fields.TextField(attr='cover')
-    summary = fields.TextField(attr='summary')
-    content = fields.TextField(attr='content')
-    created = fields.DateField(attr='created')
-    str_num = fields.IntegerField(attr="str_num")
-    reading_num = fields.IntegerField(attr="reading_num")
-    views_num = fields.IntegerField(attr="views_num")
-    comments_num = fields.IntegerField(attr="comment_num")
+    id = fields.IntegerField()
+    title = fields.TextField()
+    cover = fields.TextField()
+    summary = fields.TextField()
+    content = fields.TextField()
+    created = fields.DateField()
+    str_num = fields.IntegerField()
+    reading_num = fields.IntegerField()
+    views_num = fields.IntegerField()
+    comments_num = fields.IntegerField()
 
     class Django(object):
         model = Article

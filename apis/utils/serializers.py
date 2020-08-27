@@ -11,4 +11,4 @@ from rest_framework import serializers
 
 class QiNiuUploadSerializer(serializers.Serializer):
     """七牛上传token"""
-    name = serializers.CharField(min_length=2,max_length=30, required=True)
+    name = serializers.CharField(min_length=2, max_length=30, required=True)

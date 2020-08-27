@@ -17,7 +17,7 @@ class ArticleDocumentSerializer(DocumentSerializer):
     class Meta(object):
         document = ArticleDocument
         fields = (
-            'title', 'cover', 'summary', 'content'
+            'title', 'cover', 'summary', 'content', 'created'
         )
 
 
@@ -28,4 +28,4 @@ class AddArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('title', 'content', 'cover', 'summary', 'created')
+        fields = '__all__'
