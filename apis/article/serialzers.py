@@ -14,11 +14,9 @@ from .models import Article
 
 
 class ArticleDocumentSerializer(DocumentSerializer):
+
     class Meta(object):
         document = ArticleDocument
-        fields = (
-            'title', 'cover', 'summary', 'content', 'created'
-        )
 
 
 class AddArticleSerializer(serializers.ModelSerializer):
@@ -29,3 +27,12 @@ class AddArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
+
+
+# class AddArticleDocumentSerializer(DocumentSerializer):
+#
+#     class Meta(object):
+#         document = ArticleDocument
+#         fields = (
+#             'title', 'cover', 'summary', 'content', 'created'
+#         )

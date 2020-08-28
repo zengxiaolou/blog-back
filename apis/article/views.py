@@ -35,7 +35,7 @@ class AddArticleViewSet(APIView):
             temp = {}
             for k, v in data.items():
                 temp[k] = v
-            article = ArticleDocument(temp)
+            article = ArticleDocument(**temp)
             article.save()
             data = {
                 "msg": "添加成功"

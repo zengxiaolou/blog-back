@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Article(models.Model):
     """文章"""
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, verbose_name='文章标题')
     cover = models.CharField(max_length=255, verbose_name='文章封面')
     summary = models.TextField(verbose_name="文章简介")

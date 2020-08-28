@@ -190,8 +190,8 @@ REST_FRAMEWORK = {
     # 默认使用的版本
     'DEFAULT_VERSION': 'v1',
     # 分页设置
-    # 'DEFAULT_PAGINATION_CLASS': 'apis.utils.pagination.MyPageNumberPagination',
-    # 'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
