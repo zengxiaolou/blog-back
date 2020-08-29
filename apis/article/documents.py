@@ -27,12 +27,12 @@ class ArticleDocument(Document):
     cover = fields.TextField()
     summary = fields.TextField()
     content = fields.TextField()
-    created = fields.DateField()
     str_num = fields.IntegerField()
+    created = fields.DateField()
     reading_time = fields.IntegerField()
     views_num = fields.IntegerField()
     comments_num = fields.IntegerField()
 
-    class Django(object):
+    class Django:
         model = Article
 

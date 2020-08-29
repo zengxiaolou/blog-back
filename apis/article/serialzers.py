@@ -14,6 +14,8 @@ from .models import Article
 
 
 class ArticleDocumentSerializer(DocumentSerializer):
+    cover = serializers.CharField(min_length=30, max_length=500, required=True)
+    title = serializers.CharField(min_length=2, max_length=50, required=True)
 
     class Meta(object):
         document = ArticleDocument
