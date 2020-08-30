@@ -33,6 +33,9 @@ class ArticleDocument(Document):
     reading_time = fields.IntegerField(attr='reading_time')
     views_num = fields.IntegerField()
     comments_num = fields.IntegerField()
+    category = fields.TextField(attr='category')
+    user = fields.TextField(attr='user')
+    tags = fields.TextField(attr='tags')
 
     class Django:
         model = Article

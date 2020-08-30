@@ -9,11 +9,13 @@ INSTRUCTIONS:   文件简介
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 
-from .views import ArticleDocumentView, AddArticleViewSet
+from .views import ArticleDocumentView, AddArticleViewSet, CategoryViewSet, TagViewSet
 
 router = DefaultRouter()
 
 router.register('search', ArticleDocumentView, basename='search')
+router.register('category', CategoryViewSet, basename='category')
+router.register('tag', TagViewSet, basename='tag')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -220,7 +220,7 @@ EMAIL_HOST = 'smtp.163.com'  # 发送邮件的服务器地址
 EMAIL_HOST_USER = '18328457630@163.com'  # 不含‘@126.com’的后缀
 EMAIL_HOST_PASSWORD = 'xiaolou123'  # 非邮箱登录密码
 EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = '云动IOS计数器<18328457630@163.com>'
+DEFAULT_FROM_EMAIL = '小楼的破栈<18328457630@163.com>'
 
 # broker配置，使用Redis作为消息中间件
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'

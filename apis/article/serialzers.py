@@ -8,31 +8,44 @@ INSTRUCTIONS:   文章序列化
 import json
 from rest_framework import serializers
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from rest_framework.validators import UniqueValidator
 
 from .documents import ArticleDocument
-from .models import Article
+from .models import Article, Category, Tags
 
 
 class ArticleDocumentSerializer(DocumentSerializer):
-
     class Meta(object):
         document = ArticleDocument
 
 
 class AddArticleSerializer(DocumentSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     cover = serializers.CharField(min_length=30, max_length=500, required=True)
     title = serializers.CharField(min_length=2, max_length=50, required=True)
 
     class Meta:
         document = ArticleDocument
-        exclude = ['id', 'created', 'reading_time']
+        exclude = ['id', 'created', 'reading_time', 'user', 'category', 'tags']
 
 
-# class AddArticleDocumentSerializer(DocumentSerializer):
-#
-#     class Meta(object):
-#         document = ArticleDocument
-#         fields = (
-#             'title', 'cover', 'summary', 'content', 'created'
-#         )
+class CategorySerializer(serializers.ModelSerializer):
+    """文章分类"""
+    category = serializers.CharField(max_length=10, min_length=2, required=True,
+                                     validators=[UniqueValidator(queryset=Category.objects.all())])
+    num = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class TagsSerializer(serializers.ModelSerializer):
+    """文章标签"""
+    tag = serializers.CharField(max_length=10, min_length=2, required=True,
+                                validators=[UniqueValidator(queryset=Tags.objects.all())])
+    num = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Tags
+        fields = '__all__'
