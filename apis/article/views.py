@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
-
+from rest_framework.permissions import IsAdminUser
 
 from .documents import ArticleDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer
@@ -27,17 +27,13 @@ class ArticleDocumentView(BaseDocumentViewSet):
 
 
 class AddArticleViewSet(APIView):
-
-    @swagger_auto_schema(request_body=ArticleDocumentSerializer, responses={200: AddArticleSerializer})
+    permission_classes = (IsAdminUser,)
+    @swagger_auto_schema(request_body=AddArticleSerializer, responses={201: AddArticleSerializer})
     def post(self, request, *args, **kwargs):
         serializer = AddArticleSerializer(data=request.data)
         if serializer.is_valid():
             article_orm = Article(**serializer.validated_data)
             article_orm.save()
-            # serializer.validated_data['id'] = article_orm.id
-            # serializer.validated_data['created'] = article_orm.created
-            # article = ArticleDocument(**serializer.validated_data)
-            # article.save()
             data = {
                 "msg": "添加成功"
             }

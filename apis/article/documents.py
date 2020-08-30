@@ -23,13 +23,14 @@ INDEX.settings(
 
 @INDEX.doc_type
 class ArticleDocument(Document):
+    id = fields.IntegerField(attr='id')
     title = fields.TextField()
     cover = fields.TextField()
     summary = fields.TextField()
     content = fields.TextField()
     str_num = fields.IntegerField()
     created = fields.DateField()
-    reading_time = fields.IntegerField()
+    reading_time = fields.IntegerField(attr='reading_time')
     views_num = fields.IntegerField()
     comments_num = fields.IntegerField()
 

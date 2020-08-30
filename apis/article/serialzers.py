@@ -14,21 +14,19 @@ from .models import Article
 
 
 class ArticleDocumentSerializer(DocumentSerializer):
-    cover = serializers.CharField(min_length=30, max_length=500, required=True)
-    title = serializers.CharField(min_length=2, max_length=50, required=True)
 
     class Meta(object):
         document = ArticleDocument
 
 
-class AddArticleSerializer(serializers.ModelSerializer):
-    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+class AddArticleSerializer(DocumentSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     cover = serializers.CharField(min_length=30, max_length=500, required=True)
     title = serializers.CharField(min_length=2, max_length=50, required=True)
 
     class Meta:
-        model = Article
-        fields = '__all__'
+        document = ArticleDocument
+        exclude = ['id', 'created', 'reading_time']
 
 
 # class AddArticleDocumentSerializer(DocumentSerializer):
