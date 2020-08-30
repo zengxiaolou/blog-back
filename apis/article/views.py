@@ -45,27 +45,29 @@ class AddArticleViewSet(APIView):
 class CategoryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """分类管理"""
     def get_permissions(self):
-        if self.action == 'create' or self.action == 'destroy':
-            return [permissions.IsAdminUser()]
-        else:
+        if self.action == 'list':
             return []
+        else:
+            return [permissions.IsAdminUser()]
 
     def get_authenticate_header(self, request):
         if self.action == 'list':
             return []
-    # authentication_classes =
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
 
 class TagViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """标签管理"""
-    # def get_permissions(self):
-    #     if self.action == 'list':
-    #         permission_classes = []
-    #     else:
-    #         permission_classes = [permissions.IsAdminUser()]
-        # return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        if self.action == 'list':
+            return []
+        else:
+            return [permissions.IsAdminUser()]
+
+    def get_authenticate_header(self, request):
+        if self.action == 'list':
+            return []
 
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
