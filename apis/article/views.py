@@ -1,4 +1,3 @@
-import self as self
 from django.shortcuts import render
 from django_elasticsearch_dsl_drf.constants import *
 from django_elasticsearch_dsl_drf.filter_backends import *
@@ -15,6 +14,7 @@ from .documents import ArticleDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer
 from .models import Article, Category, Tags
 
+from rest_framework.pagination import PageNumberPagination
 
 class ArticleDocumentView(BaseDocumentViewSet):
     document = ArticleDocument
