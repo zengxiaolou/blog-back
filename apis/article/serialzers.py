@@ -45,9 +45,9 @@ class AddArticleSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     cover = serializers.CharField(min_length=2, max_length=500, required=True)
     title = serializers.CharField(min_length=2, max_length=50, required=True)
-
+    str_num = serializers.IntegerField(required=True)
     class Meta:
         # document = ArticleDocument
         model = Article
         # exclude = ['id', 'created', 'reading_time', 'user', 'category', 'tags']
-        fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag']
+        fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag', 'str_num']
