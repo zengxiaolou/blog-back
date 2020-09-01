@@ -11,6 +11,10 @@ class UserProfile(AbstractUser):
     mobile = models.CharField(max_length=11, default="", verbose_name="手机号")
     github = models.CharField(max_length=50, default="", verbose_name="github账号")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.car_set = None
+
     def __str__(self):
         return self.username
 

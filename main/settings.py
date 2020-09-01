@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'extract_apps.rest_captcha',
     'django_elasticsearch_dsl',
-    'django_elasticsearch_dsl_drf'
+    # 'django_elasticsearch_dsl_drf'
 ]
 
 MIDDLEWARE = [

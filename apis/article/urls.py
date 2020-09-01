@@ -16,8 +16,8 @@ router = DefaultRouter()
 router.register('search', ArticleDocumentView, basename='search')
 router.register('category', CategoryViewSet, basename='category')
 router.register('tag', TagViewSet, basename='tag')
+router.register('article-add', AddArticleViewSet, basename='article-add')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^add/$', AddArticleViewSet.as_view()),
 ]

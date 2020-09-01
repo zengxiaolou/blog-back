@@ -33,10 +33,9 @@ class Tags(models.Model):
 
 class Article(models.Model):
     """文章"""
-    user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="article", default=1, verbose_name='用户信息')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="article", null=True,
-                                 verbose_name="文章分类")
-    tag = models.ManyToManyField(Tags, related_name="article", verbose_name='文章标签')
+    user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="article", verbose_name='用户信息')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="article", verbose_name="文章分类")
+    tag = models.ManyToManyField("Tags", related_name="article",  verbose_name='文章标签')
     title = models.CharField(max_length=100, verbose_name='文章标题')
     cover = models.CharField(max_length=255, verbose_name='文章封面')
     summary = models.TextField(verbose_name="文章简介")

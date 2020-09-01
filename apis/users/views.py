@@ -9,7 +9,7 @@ from .serializers import UserSerializer
 User = get_user_model()
 
 
-class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,viewsets.GenericViewSet):
+class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """用户相关"""
     queryset = User.objects.all()
     serializer_class = UserSerializer

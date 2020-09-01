@@ -14,21 +14,6 @@ from .documents import ArticleDocument
 from .models import Article, Category, Tags
 
 
-class ArticleDocumentSerializer(DocumentSerializer):
-    class Meta(object):
-        document = ArticleDocument
-
-
-class AddArticleSerializer(DocumentSerializer):
-    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    cover = serializers.CharField(min_length=30, max_length=500, required=True)
-    title = serializers.CharField(min_length=2, max_length=50, required=True)
-
-    class Meta:
-        document = ArticleDocument
-        exclude = ['id', 'created', 'reading_time', 'user', 'category', 'tags']
-
-
 class CategorySerializer(serializers.ModelSerializer):
     """文章分类"""
     category = serializers.CharField(max_length=10, min_length=2, required=True,
@@ -49,3 +34,20 @@ class TagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tags
         fields = '__all__'
+
+
+class ArticleDocumentSerializer(DocumentSerializer):
+    class Meta(object):
+        document = ArticleDocument
+
+
+class AddArticleSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    cover = serializers.CharField(min_length=2, max_length=500, required=True)
+    title = serializers.CharField(min_length=2, max_length=50, required=True)
+
+    class Meta:
+        # document = ArticleDocument
+        model = Article
+        # exclude = ['id', 'created', 'reading_time', 'user', 'category', 'tags']
+        fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag']
