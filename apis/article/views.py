@@ -5,7 +5,7 @@ from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import mixins, viewsets, status, permissions
 # from rest_framework.permissions import IsAdminUser
 
-from .documents import ArticleDocument
+from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer,\
     SaveArticleDraftSerializer
 from .models import Article, Category, Tags
@@ -14,6 +14,7 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class ArticleDocumentView(BaseDocumentViewSet):
+    """已发表文章查询视图集"""
     document = ArticleDocument
     serializer_class = ArticleDocumentSerializer
     pagination_class = PageNumberPagination
@@ -34,6 +35,17 @@ class SaveArticleDraftViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """文章草稿箱相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = SaveArticleDraftSerializer
+
+
+class ArticleDraftViewSet(BaseDocumentViewSet):
+    """草稿查询"""
+    document = ArticleDraftDocument
+    serializer_class = SaveArticleDraftSerializer
+    lookup_field = 'id'
+    filter_backends = [
+        SearchFilterBackend
+    ]
+    search_fields = ('title', 'content', 'summary', 'category.category', 'tag.tag')
 
 
 class CategoryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
