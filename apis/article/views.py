@@ -8,7 +8,7 @@ from rest_framework import mixins, viewsets, status, permissions
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer,\
     SaveArticleDraftSerializer
-from .models import Article, Category, Tags
+from .models import Article, Category, Tags, ArticleDraft
 
 from rest_framework.pagination import PageNumberPagination
 
@@ -31,10 +31,11 @@ class AddArticleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = AddArticleSerializer
 
 
-class SaveArticleDraftViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """文章草稿箱相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = SaveArticleDraftSerializer
+    queryset = ArticleDraft.objects.all()
 
 
 class ArticleDraftViewSet(BaseDocumentViewSet):
