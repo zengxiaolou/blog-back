@@ -11,7 +11,7 @@ from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework.validators import UniqueValidator
 
 from .documents import ArticleDocument
-from .models import Article, Category, Tags
+from .models import Article, Category, Tags, ArticleDraft
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -46,8 +46,15 @@ class AddArticleSerializer(serializers.ModelSerializer):
     cover = serializers.CharField(min_length=2, max_length=500, required=True)
     title = serializers.CharField(min_length=2, max_length=50, required=True)
     str_num = serializers.IntegerField(required=True)
+
     class Meta:
-        # document = ArticleDocument
         model = Article
-        # exclude = ['id', 'created', 'reading_time', 'user', 'category', 'tags']
         fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag', 'str_num']
+
+
+class SaveArticleDraftSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = ArticleDraft
+        fields = ['summary', 'cover', 'title', 'content', 'user']

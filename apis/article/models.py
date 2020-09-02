@@ -32,7 +32,7 @@ class Tags(models.Model):
 
 
 class Article(models.Model):
-    """文章"""
+    """已发布文章"""
     user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="article", verbose_name='用户信息')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="article", verbose_name="文章分类")
     tag = models.ManyToManyField("Tags", related_name="article",  verbose_name='文章标签')
@@ -55,3 +55,21 @@ class Article(models.Model):
     @property
     def reading_time(self):
         return math.ceil(self.str_num/600)
+
+
+class ArticleDraft(models.Model):
+    """文章草稿箱"""
+    user = models.ForeignKey(user, on_delete=models.CASCADE, null=True, related_name="draft", verbose_name='用户信息')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name="draft",
+                                 verbose_name="文章分类")
+    tag = models.ManyToManyField("Tags", related_name="draft", verbose_name='文章标签')
+    title = models.CharField(max_length=100, null=True, verbose_name='文章标题')
+    cover = models.CharField(max_length=255, null=True, verbose_name='文章封面')
+    summary = models.TextField(null=True, verbose_name="文章简介")
+    content = models.TextField(null=True, verbose_name='文章内容')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['id']

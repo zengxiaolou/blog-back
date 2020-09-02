@@ -6,7 +6,8 @@ from rest_framework import mixins, viewsets, status, permissions
 # from rest_framework.permissions import IsAdminUser
 
 from .documents import ArticleDocument
-from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer
+from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer,\
+    SaveArticleDraftSerializer
 from .models import Article, Category, Tags
 
 from rest_framework.pagination import PageNumberPagination
@@ -24,8 +25,15 @@ class ArticleDocumentView(BaseDocumentViewSet):
 
 
 class AddArticleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """新增文章相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AddArticleSerializer
+
+
+class SaveArticleDraftViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """文章草稿箱相关"""
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = SaveArticleDraftSerializer
 
 
 class CategoryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
