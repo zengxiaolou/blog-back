@@ -51,13 +51,14 @@ class ArticleDraftDocumentSerializer(DocumentSerializer):
 class AddArticleSerializer(serializers.ModelSerializer):
     """新增文章"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    cover = serializers.CharField(min_length=2, max_length=500, required=True)
+    cover = serializers.CharField(min_length=20, max_length=500, required=True)
     title = serializers.CharField(min_length=2, max_length=50, required=True)
+    summary = serializers.CharField(min_length=20, max_length=300, required=True)
     str_num = serializers.IntegerField(required=True)
 
     class Meta:
         model = Article
-        fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag', 'str_num']
+        fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag', 'str_num', 'markdown']
 
 
 class SaveArticleDraftSerializer(serializers.ModelSerializer):

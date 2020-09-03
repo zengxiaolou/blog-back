@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl_drf.filter_backends import *
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import mixins, viewsets, status, permissions
+from rest_framework.response import Response
 
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
@@ -25,6 +26,12 @@ class AddArticleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """新增文章相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AddArticleSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+        category = serializer.validated_data["category"]
+        category.num += 1
+        category.save()
 
 
 class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,

@@ -40,6 +40,7 @@ class Article(models.Model):
     cover = models.CharField(max_length=255, verbose_name='文章封面')
     summary = models.TextField(verbose_name="文章简介")
     content = models.TextField(verbose_name='文章内容')
+    markdown = models.TextField(verbose_name='markdown')
     created = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
     str_num = models.IntegerField(default=0, verbose_name="文章字数")
     views_num = models.IntegerField(default=0, verbose_name="浏览次数")
