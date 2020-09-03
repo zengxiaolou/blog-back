@@ -1,23 +1,19 @@
-from django.shortcuts import render
-from django_elasticsearch_dsl_drf.constants import *
 from django_elasticsearch_dsl_drf.filter_backends import *
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import mixins, viewsets, status, permissions
-# from rest_framework.permissions import IsAdminUser
 
+from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
-from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer,\
-    SaveArticleDraftSerializer
+from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
+    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer
 from .models import Article, Category, Tags, ArticleDraft
-
-from rest_framework.pagination import PageNumberPagination
 
 
 class ArticleDocumentView(BaseDocumentViewSet):
     """已发表文章查询视图集"""
     document = ArticleDocument
     serializer_class = ArticleDocumentSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = MyPageNumberPagination
     lookup_field = 'id'
     filter_backends = [
         SearchFilterBackend
@@ -42,7 +38,8 @@ class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, 
 class ArticleDraftViewSet(BaseDocumentViewSet):
     """草稿查询"""
     document = ArticleDraftDocument
-    serializer_class = SaveArticleDraftSerializer
+    serializer_class = ArticleDraftDocumentSerializer
+    pagination_class = MyPageNumberPagination
     lookup_field = 'id'
     filter_backends = [
         SearchFilterBackend
@@ -50,28 +47,37 @@ class ArticleDraftViewSet(BaseDocumentViewSet):
     search_fields = ('title', 'content', 'summary', 'category.category', 'tag.tag')
 
 
-class CategoryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
-                      viewsets.GenericViewSet):
-    """分类管理"""
-
-    def get_permissions(self):
-        if self.action == 'list':
-            return []
-        else:
-            return [permissions.IsAdminUser()]
-    authentication_classes = ()
+class GetCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
 
-class TagViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class CategoryViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """分类管理"""
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+
+
+class GetTagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
+    serializer_class = TagsSerializer
+    queryset = Tags.objects.all()
+
+
+class TagViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """标签管理"""
 
     def get_permissions(self):
         if self.action == 'list':
-            return []
-        else:
-            return [permissions.IsAdminUser()]
-    authentication_classes = ()
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
+
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()

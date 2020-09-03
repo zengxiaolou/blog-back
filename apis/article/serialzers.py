@@ -10,7 +10,7 @@ from rest_framework import serializers
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework.validators import UniqueValidator
 
-from .documents import ArticleDocument
+from .documents import ArticleDocument, ArticleDraftDocument
 from .models import Article, Category, Tags, ArticleDraft
 
 
@@ -40,6 +40,12 @@ class ArticleDocumentSerializer(DocumentSerializer):
     """已发表文章查询"""
     class Meta(object):
         document = ArticleDocument
+
+
+class ArticleDraftDocumentSerializer(DocumentSerializer):
+    """已发表文章查询"""
+    class Meta(object):
+        document = ArticleDraftDocument
 
 
 class AddArticleSerializer(serializers.ModelSerializer):
