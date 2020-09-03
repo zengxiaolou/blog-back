@@ -31,7 +31,8 @@ class AddArticleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = AddArticleSerializer
 
 
-class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                              viewsets.GenericViewSet):
     """文章草稿箱相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = SaveArticleDraftSerializer
@@ -52,29 +53,25 @@ class ArticleDraftViewSet(BaseDocumentViewSet):
 class CategoryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin,
                       viewsets.GenericViewSet):
     """分类管理"""
+
     def get_permissions(self):
         if self.action == 'list':
             return []
         else:
             return [permissions.IsAdminUser()]
-
-    def get_authenticate_header(self, request):
-        if self.action == 'list':
-            return []
+    authentication_classes = ()
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
 
 class TagViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """标签管理"""
+
     def get_permissions(self):
         if self.action == 'list':
             return []
         else:
             return [permissions.IsAdminUser()]
-
-    def get_authenticate_header(self, request):
-        if self.action == 'list':
-            return []
+    authentication_classes = ()
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()

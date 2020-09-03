@@ -15,12 +15,12 @@ from .views import ArticleDocumentView, AddArticleViewSet, CategoryViewSet, TagV
 
 router = DefaultRouter()
 
-router.register('search', ArticleDocumentView, basename='search')
+router.register('search/article', ArticleDocumentView, basename='search/article')
 router.register('category', CategoryViewSet, basename='category')
 router.register('tag', TagViewSet, basename='tag')
-router.register('article-add', AddArticleViewSet, basename='article-add')
-router.register('draft/add', SaveArticleDraftViewSet, basename='draft/add')
-router.register('draft/search', ArticleDraftViewSet, basename='draft/search')
+router.register('article', AddArticleViewSet, basename='article')
+router.register('draft', SaveArticleDraftViewSet, basename='draft')
+router.register('search/draft', ArticleDraftViewSet, basename='search/draft')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -60,4 +60,4 @@ class SaveArticleDraftSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ArticleDraft
-        fields = ['summary', 'cover', 'title', 'content', 'user', 'id']
+        fields = ['summary', 'cover', 'title', 'content', 'user', 'id', 'category', 'tag']

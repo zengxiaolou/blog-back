@@ -62,7 +62,7 @@ class ArticleDraft(models.Model):
     user = models.ForeignKey(user, on_delete=models.CASCADE, null=True, related_name="draft", verbose_name='用户信息')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name="draft",
                                  verbose_name="文章分类")
-    tag = models.ManyToManyField("Tags", related_name="draft", verbose_name='文章标签')
+    tag = models.ManyToManyField("Tags", related_name="draft", blank=True, verbose_name='文章标签')
     title = models.CharField(max_length=100, null=True, blank=True, verbose_name='文章标题')
     cover = models.CharField(max_length=255, null=True, blank=True, verbose_name='文章封面')
     summary = models.TextField(null=True, blank=True, verbose_name="文章简介")
