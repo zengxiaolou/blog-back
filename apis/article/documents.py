@@ -40,7 +40,7 @@ class ArticleDocument(Document):
     class Django:
         model = Article
         fields = ['id', 'title', 'cover', 'summary', 'content', 'str_num', 'created', 'views_num', 'comments_num',
-                  'markdown']
+                  'markdown', 'like_num']
         related_models = [UserProfile, Category, Tags]
 
     def get_queryset(self):

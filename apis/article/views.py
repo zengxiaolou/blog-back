@@ -13,6 +13,8 @@ from .models import Article, Category, Tags, ArticleDraft
 class ArticleDocumentView(BaseDocumentViewSet):
     """已发表文章查询视图集"""
     document = ArticleDocument
+    authentication_classes = ()
+    permission_classes = ()
     serializer_class = ArticleDocumentSerializer
     pagination_class = MyPageNumberPagination
     lookup_field = 'id'
