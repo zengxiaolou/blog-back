@@ -1,12 +1,12 @@
 from django_elasticsearch_dsl_drf.filter_backends import *
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
-from rest_framework import mixins, viewsets, status, permissions
+from rest_framework import mixins, viewsets, status, permissions, filters
 from rest_framework.response import Response
 
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
-    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer
+    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer
 from .models import Article, Category, Tags, ArticleDraft
 
 
@@ -22,6 +22,25 @@ class ArticleDocumentView(BaseDocumentViewSet):
         SearchFilterBackend
     ]
     search_fields = ('title', 'content', 'summary', 'category.category', 'tag.tag')
+
+
+class ArchiveViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """获取文章归档"""
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = ArchiveSerializer
+    queryset = Article.objects.all()
+
+
+class HeatMapViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """获取文章数量与日期"""
+    serializer_class = ArchiveSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering = ('created',)
+
+    def get_queryset(self):
+        return Article.objects.values('created').annotate(test=sum('created')).all()
+
 
 
 class AddArticleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

@@ -68,3 +68,11 @@ class SaveArticleDraftSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleDraft
         fields = ['summary', 'cover', 'title', 'content', 'user', 'id', 'category', 'tag']
+
+
+class ArchiveSerializer(serializers.ModelSerializer):
+    """归档相关"""
+    class Meta:
+        model = Article
+        fields = ['title', 'created', 'id', 'category']
+        depth = 1
