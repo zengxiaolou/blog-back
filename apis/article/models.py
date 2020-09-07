@@ -42,6 +42,7 @@ class Article(models.Model):
     content = models.TextField(verbose_name='文章内容')
     markdown = models.TextField(verbose_name='markdown')
     created = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
+    create = models.DateField(default=datetime.now, verbose_name="创建日期")
     str_num = models.IntegerField(default=0, verbose_name="文章字数")
     views_num = models.IntegerField(default=0, verbose_name="浏览次数")
     comments_num = models.IntegerField(default=0, verbose_name="评论数量")
