@@ -52,7 +52,7 @@ class Article(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-created']
 
     @property
     def reading_time(self):
