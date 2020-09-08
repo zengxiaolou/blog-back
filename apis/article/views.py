@@ -28,6 +28,14 @@ class ArticleDocumentView(BaseDocumentViewSet):
     ]
     search_fields = ('title', 'content', 'summary', 'category.category', 'tag.tag')
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        article = Article.objects.get(id=instance.id)
+        article.views_num += 1
+        article.save()
+        return Response(serializer.data)
+
 
 class ArchiveViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """获取文章归档"""
@@ -47,7 +55,7 @@ class HeatMapViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Article.objects.values('created').annotate(test=sum('created')).all()
 
 
-class AddArticleViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """新增文章相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AddArticleSerializer
