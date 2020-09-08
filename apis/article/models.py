@@ -33,8 +33,9 @@ class Tags(models.Model):
 
 class Article(models.Model):
     """已发布文章"""
-    user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="article", verbose_name='用户信息')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="article", verbose_name="文章分类")
+    like_user = models.ManyToManyField("users.UserProfile", related_name="article", null=True, blank=True,
+                                       verbose_name="点赞用户")
     tag = models.ManyToManyField("Tags", related_name="article",  verbose_name='文章标签')
     title = models.CharField(max_length=100, verbose_name='文章标题')
     cover = models.CharField(max_length=255, verbose_name='文章封面')
@@ -46,7 +47,6 @@ class Article(models.Model):
     str_num = models.IntegerField(default=0, verbose_name="文章字数")
     views_num = models.IntegerField(default=0, verbose_name="浏览次数")
     comments_num = models.IntegerField(default=0, verbose_name="评论数量")
-    like_num = models.IntegerField(default=0, verbose_name="点赞数量")
 
     def __str__(self):
         return self.title
@@ -75,3 +75,11 @@ class ArticleDraft(models.Model):
 
     class Meta:
         ordering = ['id']
+
+
+class ArticleInfo(models.Model):
+    """文章信息"""
+    article_num = models.IntegerField(default=0, verbose_name='文章总数')
+    view_num = models.IntegerField(default=0, verbose_name="文章总浏览量")
+    like_num = models.IntegerField(default=0, verbose_name="文章总点赞量")
+

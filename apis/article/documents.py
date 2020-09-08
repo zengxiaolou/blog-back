@@ -19,7 +19,7 @@ from apis.users.models import UserProfile
 @registry.register_document
 class ArticleDocument(Document):
     reading_time = fields.IntegerField(attr='reading_time')
-    user = fields.ObjectField(properties={
+    like_user = fields.ObjectField(properties={
         'username': fields.TextField(),
     })
     category = fields.ObjectField(properties={
@@ -40,13 +40,13 @@ class ArticleDocument(Document):
     class Django:
         model = Article
         fields = ['id', 'title', 'cover', 'summary', 'content', 'str_num', 'created', 'views_num', 'comments_num',
-                  'markdown', 'like_num']
+                  'markdown']
         related_models = [UserProfile, Category, Tags]
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(ArticleDocument, self).get_queryset().select_related(
-            'user'
+            'category'
         )
 
     def get_instances_from_related(self, related_instance):

@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncDay, Trunc
 from django_elasticsearch_dsl_drf.filter_backends import *
@@ -11,8 +9,8 @@ from rest_framework.views import APIView
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
-    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer
-from .models import Article, Category, Tags, ArticleDraft
+    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer
+from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
 
 
 class ArticleDocumentView(BaseDocumentViewSet):
@@ -34,6 +32,13 @@ class ArticleDocumentView(BaseDocumentViewSet):
         article = Article.objects.get(id=instance.id)
         article.views_num += 1
         article.save()
+        try:
+            article_info = ArticleInfo.objects.get(id=1)
+            article_info.view_num += 1
+            article_info.save()
+        except Exception as e:
+            article_info = ArticleInfo(article_num=0, view_num=1, like_num=0)
+            article_info.save()
         return Response(serializer.data)
 
 
@@ -65,6 +70,13 @@ class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewse
         category = serializer.validated_data["category"]
         category.num += 1
         category.save()
+        try:
+            article_info = ArticleInfo.objects.get(id=1)
+            article_info.article_num += 1
+            article_info.save()
+        except Exception as e:
+            article_info = ArticleInfo(article_num=1, view_num=0, like_num=0)
+            article_info.save()
 
 
 class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
@@ -125,23 +137,12 @@ class TagViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.Gen
     queryset = Tags.objects.all()
 
 
-class GetViewAndLikeView(APIView):
+class GetViewAndLikeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """获取文章总数、浏览总数、点赞总数"""
     authentication_classes = ()
     permission_classes = ()
-
-    def get(self, request, *args, **kwargs):
-        article = Article.objects.count()
-        view = Article.objects.all().aggregate(views=Sum('views_num'), likes=Sum('like_num'))
-        views, like = view['views'], view['likes']
-        data = {
-            "results": {
-                'article': article,
-                'view': views,
-                'like': like
-            }
-        }
-        return Response(data, status=status.HTTP_200_OK)
+    serializer_class = ArticleInfoSerializer
+    queryset = ArticleInfo.objects.all()
 
 
 class GetLastYearDataView(APIView):

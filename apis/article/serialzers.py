@@ -11,7 +11,7 @@ from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework.validators import UniqueValidator
 
 from .documents import ArticleDocument, ArticleDraftDocument
-from .models import Article, Category, Tags, ArticleDraft
+from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -50,7 +50,6 @@ class ArticleDraftDocumentSerializer(DocumentSerializer):
 
 class AddArticleSerializer(serializers.ModelSerializer):
     """新增文章"""
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     cover = serializers.CharField(min_length=20, max_length=500, required=True)
     title = serializers.CharField(min_length=2, max_length=50, required=True)
     summary = serializers.CharField(min_length=20, max_length=300, required=True)
@@ -58,7 +57,7 @@ class AddArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['summary', 'cover', 'title', 'content', 'user', 'category', 'tag', 'str_num', 'markdown']
+        fields = ['summary', 'cover', 'title', 'content', 'category', 'tag', 'str_num', 'markdown']
 
 
 class SaveArticleDraftSerializer(serializers.ModelSerializer):
@@ -76,3 +75,11 @@ class ArchiveSerializer(serializers.ModelSerializer):
         model = Article
         fields = ['title', 'created', 'id', 'category']
         depth = 1
+
+
+class ArticleInfoSerializer(serializers.ModelSerializer):
+    """整站信息"""
+    class Meta:
+        model = ArticleInfo
+        fields = '__all__'
+
