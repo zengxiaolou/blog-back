@@ -1,5 +1,4 @@
-from django.db.models import Sum, Count
-from django.db.models.functions import TruncDay, Trunc
+from django.db.models import Count
 from django_elasticsearch_dsl_drf.filter_backends import *
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import mixins, viewsets, status, permissions, filters
@@ -9,7 +8,8 @@ from rest_framework.views import APIView
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
-    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer
+    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer, \
+    ArticleOverViewSerializer
 from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
 
 
@@ -22,8 +22,12 @@ class ArticleDocumentView(BaseDocumentViewSet):
     pagination_class = MyPageNumberPagination
     lookup_field = 'id'
     filter_backends = [
-        SearchFilterBackend
+        SearchFilterBackend,
     ]
+    ordering_fields = {
+        'created': 'created'
+    }
+    ordering = ('-created',)
     search_fields = ('title', 'content', 'summary', 'category.category', 'tag.tag')
 
     def retrieve(self, request, *args, **kwargs):
@@ -60,10 +64,19 @@ class HeatMapViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Article.objects.values('created').annotate(test=sum('created')).all()
 
 
+class ArticleOverViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """获取文章概览数据"""
+    serializer_class = ArticleOverViewSerializer
+    permission_classes = ()
+    authentication_classes = ()
+    queryset = Article.objects.all()
+
+
 class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """新增文章相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AddArticleSerializer
+    queryset = Article.objects.all()
 
     def perform_create(self, serializer):
         serializer.save()

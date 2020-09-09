@@ -43,7 +43,7 @@ class ArticleDocumentSerializer(DocumentSerializer):
 
 
 class ArticleDraftDocumentSerializer(DocumentSerializer):
-    """已发表文章查询"""
+    """草稿查询"""
     class Meta(object):
         document = ArticleDraftDocument
 
@@ -58,6 +58,14 @@ class AddArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['summary', 'cover', 'title', 'content', 'category', 'tag', 'str_num', 'markdown']
+
+
+class ArticleOverViewSerializer(serializers.ModelSerializer):
+    reading_time = serializers.IntegerField()
+    """文章概览"""
+    class Meta:
+        model = Article
+        exclude = ['content', 'markdown', 'create']
 
 
 class SaveArticleDraftSerializer(serializers.ModelSerializer):
