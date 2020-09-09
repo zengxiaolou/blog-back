@@ -34,8 +34,7 @@ class Tags(models.Model):
 class Article(models.Model):
     """已发布文章"""
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="article", verbose_name="文章分类")
-    like_user = models.ManyToManyField("users.UserProfile", related_name="article", null=True, blank=True,
-                                       verbose_name="点赞用户")
+    like_user = models.ManyToManyField("users.UserProfile", related_name="article", verbose_name="点赞用户")
     tag = models.ManyToManyField("Tags", related_name="article",  verbose_name='文章标签')
     title = models.CharField(max_length=100, verbose_name='文章标题')
     cover = models.CharField(max_length=255, verbose_name='文章封面')
