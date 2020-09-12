@@ -6,13 +6,10 @@ TIME:           2020/8/18-13:31
 INSTRUCTIONS:   小工具
 """
 
-import re
-import requests
 from random import choice
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
-from django.db.models import Q
 
 User = get_user_model()
 
@@ -26,7 +23,7 @@ def generate_code() -> str:
     return "".join(random_str)
 
 
-def jwt_response_payload_handler(token: str, user=None, request=None):
+def jwt_response_payload_handler(token: str, user=None):
     """为返回的结果添加用户相关信息"""
     return {'token': token, 'username': user.username, 'id': user.id, 'role': user.is_superuser}
 
@@ -39,4 +36,4 @@ class CustomBackend(ModelBackend):
             if user.check_password(password):
                 return user
         except Exception as e:
-            return None
+            return

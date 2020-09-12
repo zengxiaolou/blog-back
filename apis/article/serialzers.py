@@ -5,7 +5,6 @@ EMAIL:          zengevent@gmail.com
 TIME:           2020/8/24-18:03
 INSTRUCTIONS:   文章序列化
 """
-import json
 from rest_framework import serializers
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework.validators import UniqueValidator
@@ -90,4 +89,3 @@ class ArticleInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleInfo
         fields = '__all__'
-
