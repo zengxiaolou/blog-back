@@ -8,9 +8,10 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAdminUser
 from main.settings import QINIU_BUCKET_NAME
 
-from .serializers import *
-from .utils.qiniu_utils import q, put_file
 from apis.utils import tasks
+
+from .serializers import *
+from .utils.qiniu_utils import q
 
 
 class CheckCaptcha(APIView):

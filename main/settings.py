@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import sys
 import datetime
+import logging
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +31,6 @@ SECRET_KEY = '=tpgy423n=fhwr*&k9^tk@_^%%z9gm7m+5%6t*0p2r3zw=%fb1'
 DEBUG = True
 
 ALLOWED_HOSTS = ["*", ]
-
 
 # Application definition
 
@@ -48,7 +49,6 @@ INSTALLED_APPS = [
     'django_filters',
     'extract_apps.rest_captcha',
     'django_elasticsearch_dsl',
-    # 'django_elasticsearch_dsl_drf'
 ]
 
 MIDDLEWARE = [
@@ -65,9 +65,9 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 # 允许所有的请求头
-CORS_ALLOW_HEADERS = ('*', )
+CORS_ALLOW_HEADERS = ('*',)
 # 允许所有方法
-CORS_ALLOW_METHODS = ('*', )
+CORS_ALLOW_METHODS = ('*',)
 
 ROOT_URLCONF = 'main.urls'
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -90,7 +90,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -105,7 +104,6 @@ DATABASES = {
         'OPTIONS': {'charset': 'utf8mb4'}
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -125,7 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -138,7 +135,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -157,15 +153,15 @@ MEDIAFILES_DIRS = (
 
 # 内存
 CACHES = {
-  "default": {
-    "BACKEND": "django_redis.cache.RedisCache",
-    "LOCATION": "redis://127.0.0.1:6379",
-    # "LOCATION": "redis://redis:6379",
-    "OPTIONS": {
-      "CLIENT_CLASS": "django_redis.client.DefaultClient",
-      "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        # "LOCATION": "redis://redis:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+        }
     }
-  }
 }
 
 REST_FRAMEWORK = {
@@ -197,14 +193,12 @@ REST_FRAMEWORK = {
 }
 
 REST_FRAMEWORK_EXTENSIONS = {
-   'DEFAULT_BULK_OPERATION_HEADER_NAME': None
+    'DEFAULT_BULK_OPERATION_HEADER_NAME': None
 }
-
 
 AUTHENTICATION_BACKENDS = (
     'apis.users.utils.CustomBackend',
 )
-
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 生成的token有效期
@@ -231,18 +225,17 @@ CELERY_TIME_ZONE = 'Asia/Shanghai'
 CELERY_ENABLE_UTC = True
 
 SWAGGER_SETTINGS = {
-   'SECURITY_DEFINITIONS': {
-      'Basic': {
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
             'type': 'basic'
-      },
-      'Bearer': {
+        },
+        'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header'
-      }
-   }
+        }
+    }
 }
-
 
 # 七牛云设置
 # 需要填写你的Access_key 和 Secret_key

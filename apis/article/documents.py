@@ -6,10 +6,7 @@ TIME:           2020/8/25-14:45
 INSTRUCTIONS:   文件简介
 """
 
-from django.conf import settings
-
-from django_elasticsearch_dsl import Document, Index, fields
-from elasticsearch_dsl import analyzer
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from .models import Article, Category, Tags, ArticleDraft
@@ -49,7 +46,8 @@ class ArticleDocument(Document):
             'category'
         )
 
-    def get_instances_from_related(self, related_instance):
+    @staticmethod
+    def get_instances_from_related(related_instance):
         """If related_models is set, define how to retrieve the Car instance(s) from the related model.
         The related_models option should be used with caution because it can lead in the index
         to the updating of a lot of items.
@@ -93,7 +91,8 @@ class ArticleDraftDocument(Document):
             'user'
         )
 
-    def get_instances_from_related(self, related_instance):
+    @staticmethod
+    def get_instances_from_related(related_instance):
         """If related_models is set, define how to retrieve the Car instance(s) from the related model.
         The related_models option should be used with caution because it can lead in the index
         to the updating of a lot of items.

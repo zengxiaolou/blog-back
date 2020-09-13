@@ -81,4 +81,3 @@ class ArticleInfo(models.Model):
     article_num = models.IntegerField(default=0, verbose_name='文章总数')
     view_num = models.IntegerField(default=0, verbose_name="文章总浏览量")
     like_num = models.IntegerField(default=0, verbose_name="文章总点赞量")
-
