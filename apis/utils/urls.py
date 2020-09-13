@@ -11,5 +11,6 @@ from .views import *
 urlpatterns = [
     url(r'^captcha/', include('extract_apps.rest_captcha.urls')),
     url(r'^check-captcha/$', CheckCaptcha.as_view()),
-    url(r'^qiniu-token/$', GetQiNiuToken.as_view())
+    url(r'^qiniu-token/$', GetQiNiuToken.as_view()),
+    url(r'^get-sms/$', EmailView.as_view())
 ]

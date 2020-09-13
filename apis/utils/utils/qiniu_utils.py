@@ -7,9 +7,8 @@ INSTRUCTIONS:   七牛token
 """
 
 from qiniu import Auth, put_file
-import qiniu.config
-from main.settings import ACCESS_KEY, SECRET_KEY, BUCKET_NAME
+from main.settings import QINIU_ACCESS_KEY, QINIU_SECRET_KEY
 
 # 构建鉴权对象
-q = Auth(ACCESS_KEY, SECRET_KEY)
+q = Auth(QINIU_ACCESS_KEY, QINIU_SECRET_KEY)
 

@@ -1,15 +1,16 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
+from apis.utils.utils.other import generate_code
 from extract_apps.rest_captcha.serializers import RestCaptchaSerializer
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAdminUser
-from main.settings import SECRET_KEY, ACCESS_KEY, BUCKET_NAME
+from main.settings import QINIU_BUCKET_NAME
 
 from .serializers import *
 from .utils.qiniu_utils import q, put_file
+from apis.utils import tasks
 
 
 class CheckCaptcha(APIView):
@@ -34,10 +35,31 @@ class GetQiNiuToken(APIView):
     def post(self, request, *args, **kwargs):
         serializer = QiNiuUploadSerializer(data=request.data)
         if serializer.is_valid():
-            token = q.upload_token(BUCKET_NAME, serializer.validated_data['name'], 3600)
+            token = q.upload_token(QINIU_BUCKET_NAME, serializer.validated_data['name'], 3600)
             data = {
                 "token": token
             }
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class EmailView(APIView):
+    """生成email 验证码并发送"""
+    authentication_classes = ()
+    permission_classes = ()
+
+    @swagger_auto_schema(request_body=EmailSerializer, responses={201: EmailSerializer})
+    def post(self, request, *args, **kwargs):
+        res = request.data.get('reset', False)
+        if res:
+            serializer = ResetEmailSerializer(data=request.data)
+        else:
+            serializer = EmailSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data["email"]
+            code = generate_code()
+            res = tasks.send_mails.delay('www.messstack.com', code, email)
+            cache.set('email' + email, code, 300)
+            return Response({"data": "邮件已发送", "task_id": res.task_id}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
