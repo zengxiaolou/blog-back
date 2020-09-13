@@ -13,7 +13,6 @@ class UserProfile(AbstractUser):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.draft = None
         self.car_set = None
 
     def __str__(self):

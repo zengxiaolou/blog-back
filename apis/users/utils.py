@@ -23,7 +23,7 @@ def generate_code() -> str:
     return "".join(random_str)
 
 
-def jwt_response_payload_handler(token: str, user=None):
+def jwt_response_payload_handler(token: str, user=None, request=None):
     """为返回的结果添加用户相关信息"""
     return {'token': token, 'username': user.username, 'id': user.id, 'role': user.is_superuser}
 
