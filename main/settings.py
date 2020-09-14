@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'extract_apps.rest_captcha',
     'django_elasticsearch_dsl',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -83,6 +85,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -101,7 +105,9 @@ DATABASES = {
         'PASSWORD': '123456',
         'HOST': '127.0.0.1',
         'PORT': 3306,
-        'OPTIONS': {'charset': 'utf8mb4'}
+        'OPTIONS': {'charset': 'utf8mb4',
+                    # 'init_command': 'SET storage_engine=INNODB;'
+                    }
     }
 }
 
@@ -196,9 +202,7 @@ REST_FRAMEWORK_EXTENSIONS = {
     'DEFAULT_BULK_OPERATION_HEADER_NAME': None
 }
 
-AUTHENTICATION_BACKENDS = (
-    'apis.users.utils.CustomBackend',
-)
+
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 生成的token有效期
@@ -254,3 +258,31 @@ ELASTICSEARCH_DSL = {
 ELASTICSEARCH_INDEX_NAME = {
     'apis.article.documents': "article"
 }
+
+# social_setting
+AUTHENTICATION_BACKENDS = (
+    'apis.users.utils.CustomBackend',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# SOCIAL_AUTH_LOGIN_URL = '/login/'
+# SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'schema-swagger-ui'
+SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+SOCIAL_AUTH_GITHUB_KEY = '5e4dc06f33fd16907a9a'
+SOCIAL_AUTH_GITHUB_SECRET = '03420d51946f87b05bb0c4d053380c2027ff4846'
