@@ -23,8 +23,9 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=20, min_length=3, required=True)
 
     @staticmethod
-    def validate_data(username):
+    def validate_username(username):
         """检查用户名是否合规"""
+        print(username)
         if re.match("^(?!\d+$)[\da-zA-Z_]+$", username) is None:
             raise serializers.ValidationError('用户名不符合要求')
         if User.objects.filter(username=username).first():
