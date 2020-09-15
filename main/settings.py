@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apis.users',
     'apis.utils',
     'apis.article',
+    'apis.operations',
     'rest_framework',
     'corsheaders',
     'drf_yasg',
@@ -144,6 +145,46 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+# 日志设置
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {  # 格式化
+        'simple': {
+            'format': '[%(asctime)s] %(filename)s %(lineno)d ==> %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+                },
+        'console': {
+            'format': '[%(asctime)s][%(levelname)s] %(pathname)s %(lineno)d ==> %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+                }
+    },
+    'handlers': {  # 处理器
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        },
+        'fileHandler': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'formatter': 'simple',
+            'filename': 'art.log'
+        }
+
+    },
+    'loggers': {  # 记录器
+        'mdjango': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False
+        }
+
+    }
+}
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

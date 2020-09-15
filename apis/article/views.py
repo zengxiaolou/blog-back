@@ -11,6 +11,9 @@ from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, Categor
     SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer, \
     ArticleOverViewSerializer
 from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
+import logging
+
+logger = logging.getLogger('mdjango')
 
 
 class ArticleDocumentView(BaseDocumentViewSet):
@@ -70,6 +73,18 @@ class ArticleOverViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = ()
     authentication_classes = ()
     queryset = Article.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            res = self.get_paginated_response(serializer.data)
+            for i in res.data['results']:
+                i['like_user'] = len(i['like_user'])
+            return res
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
