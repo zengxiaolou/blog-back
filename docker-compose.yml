@@ -1,0 +1,89 @@
+version: "3"
+services:
+  redis:
+    image: redis:3
+    container_name: redis
+    command: redis-server
+    volumes:
+      - ./depends_on/redis:/data
+    ports:
+      - "6379:6379"
+    restart: always
+
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      - MYSQL_BATABASE=chat # 数据库名称
+      - MYSQL_ROOT_PASSWORD=123456 # 数据库密码
+    volumes:
+      - ./deployment/mysql/data:/var/lib/mysql #挂载数据库数据
+      - ./deployment/mysql/conf/my.cnf:/etc/mysql/my.cnf #关在配置文件
+      - ./deployment/mysql/init:/chat-entrypoint-initdb.d/ #挂载数据初始化sql脚本
+    ports:
+      - "3306:3306"
+    restart: always
+
+  es: 
+    image: elasticsearch:7.8
+    container_name: es
+    privileged: true
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - node.name=node0
+      - node.master=true
+      - node.data=true
+      - bootstrap.memory_lock=true
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - cluster.initial_master_nodes=node0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch_n0,elasticsearch_n1,elasticsearch_n2"
+      - "discovery.zen.minimum_master_nodes=2"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /data/base/es/data/node0:/usr/share/elasticsearch/data
+      - ./logs/node0:/usr/share/elasticsearch/logs
+    ports:
+      - 9200:9200
+      - 9300:9300
+    restart: always
+
+  web:
+    build: .
+    expose:
+      - "8000"
+    volumes:
+      - .:/project
+      - /tmp/logs:/tmp
+    command: bash start.sh
+    links:
+      - redis
+      - db
+      - es
+    depends_on:
+      - redis
+      - db
+      - es
+    restart: always
+
+  nginx:
+    build: deployment/nginx
+    ports:
+      - '80:80'
+      - "443:443"
+    expose:
+      - "8000"
+    volumes:
+      - ./static:/usr/share/nginx/html/static #挂载静态文件
+      - ./media:/usr/share/nginx/html/media #上传文件
+      - ./deployment/nginx/ssl:/usr/share/nginx/ssl # 挂载ssl证书目录
+      - ./dist:/usr/share/nginx/html/ 
+    links:
+      - web
+    depends_on:
+      - web
+    restart: always
