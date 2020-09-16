@@ -14,7 +14,7 @@ services:
     image: mysql:5.7
     container_name: mysql
     environment:
-      - MYSQL_BATABASE=chat # 数据库名称
+      - MYSQL_BATABASE=blog # 数据库名称
       - MYSQL_ROOT_PASSWORD=123456 # 数据库密码
     volumes:
       - ./deployment/mysql/data:/var/lib/mysql #挂载数据库数据
@@ -45,8 +45,8 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /data/base/es/data/node0:/usr/share/elasticsearch/data
-      - ./logs/node0:/usr/share/elasticsearch/logs
+      - ./deployment/es/data:/usr/share/elasticsearch/data
+      - ./deployment/es/logs:/usr/share/elasticsearch/logs
     ports:
       - 9200:9200
       - 9300:9300
