@@ -2,8 +2,7 @@
 FROM nginx
 
 # 删除原有配置文件，创建金泰文件夹与ssl证书保存文件夹
-RUN 
-mkdir -p /usr/share/nginx/html/static\
+RUN mkdir -p /usr/share/nginx/html/static\
 && mkdir -p /usr/share/nginx/html/media\
 && mkdir -p /usr/share/nginx/ssl
 
