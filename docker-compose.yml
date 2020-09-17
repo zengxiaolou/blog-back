@@ -8,7 +8,7 @@ services:
       - ./depends_on/redis:/data
     ports:
       - "6379:6379"
-    restart: always
+#    restart: always
 
   db:
     image: mysql:5.7
@@ -22,7 +22,7 @@ services:
       - ./deployment/mysql/init:/chat-entrypoint-initdb.d/ #挂载数据初始化sql脚本
     ports:
       - "3306:3306"
-    restart: always
+#    restart: always
 
   es: 
     image: elasticsearch:7.8
@@ -45,12 +45,12 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /data/base/es/data/node0:/usr/share/elasticsearch/data
-      - ./logs/node0:/usr/share/elasticsearch/logs
+      - ./data:/usr/share/elasticsearch/data
+      - ./logs:/usr/share/elasticsearch/logs
     ports:
       - 9200:9200
       - 9300:9300
-    restart: always
+#    restart: always
 
   web:
     build: .
@@ -86,4 +86,4 @@ services:
       - web
     depends_on:
       - web
-    restart: always
+#    restart: always

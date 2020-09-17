@@ -1,5 +1,5 @@
 # 建立python3.7环境
-FROM python:3.7
+FROM python:3.8.3
 
 # 镜像作者
 MAINTAINER zxy Zengevent@gmail.com
@@ -17,7 +17,7 @@ WORKDIR /project
 ADD . /project
 
 # 利用pip 安装依赖（ -i 表示指定清华源，默认下载过慢）
-RUN pip3 install -r requirement.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip3 install -r requirement.txt -i https://pypi.doubanio.com/simple
 
 # 设置环境变量
 ENV SPIDER=/project
