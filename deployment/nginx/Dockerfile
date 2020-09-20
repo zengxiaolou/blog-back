@@ -9,3 +9,4 @@ mkdir -p /usr/share/nginx/html/static\
 
 # 添加配置文件
 ADD ./nginx.conf /etc/nginx/conf.d/
+ADD ./conf/nginx.conf /etc/nginx/
