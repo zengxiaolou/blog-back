@@ -113,7 +113,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-migrations/
+apis/article/migrations/*
+!apis/article/migrations/__init__.py
+apis/users/migrations/*
+!apis/users/migrations/__init__.py
+apis/operations/migrations/*
+!apis/operations/migrations/__init__.py
+apis/utils/migrations/*
+!apis/utils/migrations/__init__.py
 
-!migrations/__init__.py
 keys.py
