@@ -5,6 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
+#
+#.idea/
+#
+#.DS_Store
 
 # Distribution / packaging
 .Python
@@ -115,10 +119,13 @@ dmypy.json
 
 apis/article/migrations/*
 !apis/article/migrations/__init__.py
+
 apis/users/migrations/*
 !apis/users/migrations/__init__.py
+
 apis/operations/migrations/*
 !apis/operations/migrations/__init__.py
+
 apis/utils/migrations/*
 !apis/utils/migrations/__init__.py
 
