@@ -6,6 +6,7 @@ MAINTAINER zxy Zengevent@gmail.com
 
 # 设置python 环境变量
 ENV PYTHONUNBUDFFERED 1
+ENV APP_ENV "prod"
 
 # 创建project 文件夹
 RUN mkdir /projcet
