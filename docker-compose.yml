@@ -27,7 +27,7 @@ services:
     restart: always
 
   es: 
-    image: elasticsearch:7.8
+    image: elasticsearch:7.8.1
     container_name: es
     privileged: true
     environment:
