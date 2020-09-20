@@ -116,4 +116,5 @@ dmypy.json
 
 migrations/
 
+!migrations/__init__.py
 keys.py
