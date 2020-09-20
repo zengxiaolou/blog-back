@@ -15,7 +15,20 @@ import sys
 import datetime
 import logging
 
+from main.keys import JWT_KEY, KEY_EMAIL_HOST_USER, KEY_EMAIL_HOST_PASSWORD, KEY_QINIU_ACCESS_KEY, KEY_QINIU_SECRET_KEY, KEY_QINIU_BUCKET_NAME, KEY_SOCIAL_AUTH_GITHUB_KEY, KEY_SOCIAL_AUTH_GITHUB_SECRET
 
+
+APP_ENV = os.getenv('APP_ENV')
+if APP_ENV == 'prod':
+    from .prod_settings import *
+elif APP_ENV == 'dev':
+    from .dev_settings import *
+elif APP_ENV == 'docker':
+    from .docker_settings import *
+else:
+    from .dev_settings import *
+print(APP_ENV)
+print(YASG_URL)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
@@ -26,9 +39,6 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extract_apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=tpgy423n=fhwr*&k9^tk@_^%%z9gm7m+5%6t*0p2r3zw=%fb1'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ["*", ]
 
@@ -94,23 +104,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-        'PORT': 3306,
-        'OPTIONS': {'charset': 'utf8mb4',
-                    # 'init_command': 'SET storage_engine=INNODB;'
-                    }
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -244,19 +237,19 @@ REST_FRAMEWORK_EXTENSIONS = {
 }
 
 
-
+# JWT 配置
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 生成的token有效期
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'apis.users.utils.jwt_response_payload_handler',  # response中token的payload部分处理函数
-    'JWT_SECRET_KEY': 'zzxxyy123',
+    'JWT_SECRET_KEY': JWT_KEY,
 }
 
 # 手机号正则表达式
 REGEX_MOBILE = "^1[354789]\d{9}$|^147\d{8}$|^176\d{8}$"
 
 EMAIL_HOST = 'smtp.163.com'  # 发送邮件的服务器地址
-EMAIL_HOST_USER = '18328457630@163.com'  # 不含‘@126.com’的后缀
-EMAIL_HOST_PASSWORD = 'xiaolou123'  # 非邮箱登录密码
+EMAIL_HOST_USER = KEY_EMAIL_HOST_USER  # 不含‘@126.com’的后缀
+EMAIL_HOST_PASSWORD = KEY_EMAIL_HOST_PASSWORD  # 非邮箱登录密码
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = '小楼的破栈<18328457630@163.com>'
 
@@ -284,9 +277,9 @@ SWAGGER_SETTINGS = {
 
 # 七牛云设置
 # 需要填写你的Access_key 和 Secret_key
-QINIU_ACCESS_KEY = '3hbl1YOcVTeyYsHOxvT73OpT-zK5jRBPda8tgCv_'
-QINIU_SECRET_KEY = 'TWYbwJ9Y07XNCu0BB7d-6Ek1u5qHEe8D9uWD2DHU'
-QINIU_BUCKET_NAME = 'messstack01'
+QINIU_ACCESS_KEY = KEY_QINIU_ACCESS_KEY
+QINIU_SECRET_KEY = KEY_QINIU_SECRET_KEY
+QINIU_BUCKET_NAME = KEY_QINIU_BUCKET_NAME
 
 
 # Elasticsearch configuration
@@ -325,5 +318,5 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
-SOCIAL_AUTH_GITHUB_KEY = '5e4dc06f33fd16907a9a'
-SOCIAL_AUTH_GITHUB_SECRET = '03420d51946f87b05bb0c4d053380c2027ff4846'
+SOCIAL_AUTH_GITHUB_KEY = KEY_SOCIAL_AUTH_GITHUB_KEY
+SOCIAL_AUTH_GITHUB_SECRET = KEY_SOCIAL_AUTH_GITHUB_SECRET

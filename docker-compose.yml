@@ -15,7 +15,9 @@ services:
     container_name: mysql
     environment:
       - MYSQL_BATABASE=blog # 数据库名称
-      - MYSQL_ROOT_PASSWORD=123456 # 数据库密码
+      - MYSQL_ROOT_PASSWORD= zzxxyy # 数据库密码
+      - MYSQL_USER=xiaolou
+      - MYSQL_PASSWORD=zzxxyy
     volumes:
       - ./deployment/mysql/data:/var/lib/mysql #挂载数据库数据
       - ./deployment/mysql/conf/my.cnf:/etc/mysql/my.cnf #关在配置文件
@@ -25,7 +27,7 @@ services:
     restart: always
 
   es: 
-    image: elasticsearch:7.7.1
+    image: elasticsearch:7.8
     container_name: es
     privileged: true
     environment:
@@ -38,15 +40,13 @@ services:
       - http.cors.allow-origin=*
       - cluster.initial_master_nodes=node0
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch_n0,elasticsearch_n1,elasticsearch_n2"
-      - "discovery.zen.minimum_master_nodes=2"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ./deployment/es/data:/usr/share/elasticsearch/data
-      - ./deployment/es/logs:/usr/share/elasticsearch/logs
+      - ./deployment/data/node0:/usr/share/elasticsearch/data
+      - ./deployment/logs/node0:/usr/share/elasticsearch/logs
     ports:
       - 9200:9200
       - 9300:9300
@@ -86,4 +86,4 @@ services:
       - web
     depends_on:
       - web
-#    restart: always
+    restart: always
