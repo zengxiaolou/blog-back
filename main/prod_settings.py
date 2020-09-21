@@ -26,3 +26,27 @@ DATABASES = {
 
 # drf_yasg URL配置
 YASG_URL = 'http://www.messstack.com/'
+
+# 内存设置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+        }
+    }
+}
+
+# broker配置，使用Redis作为消息中间件
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
+# backend配置，这里使用redis
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+
+# Elasticsearch configuration
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}

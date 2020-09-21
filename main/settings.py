@@ -190,19 +190,6 @@ MEDIAFILES_DIRS = (
     os.path.join(BASE_DIR, "static/../media"),
 )
 
-# 内存
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
-        # "LOCATION": "redis://redis:6379",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
-        }
-    }
-}
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -252,10 +239,6 @@ EMAIL_HOST_PASSWORD = KEY_EMAIL_HOST_PASSWORD  # 非邮箱登录密码
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = '小楼的破栈<18328457630@163.com>'
 
-# broker配置，使用Redis作为消息中间件
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
-# backend配置，这里使用redis
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
 # 结果序列化方案
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIME_ZONE = 'Asia/Shanghai'
@@ -281,13 +264,9 @@ QINIU_SECRET_KEY = KEY_QINIU_SECRET_KEY
 QINIU_BUCKET_NAME = KEY_QINIU_BUCKET_NAME
 
 
-# Elasticsearch configuration
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'localhost:9200'
-    },
-}
 
+
+# Elasticsearch configuration
 ELASTICSEARCH_INDEX_NAME = {
     'apis.article.documents': "article"
 }
