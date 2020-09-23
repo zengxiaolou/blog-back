@@ -279,8 +279,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # SOCIAL_AUTH_LOGIN_URL = '/login/'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://www.messstack.com/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = 'http://www.baidu.com/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://127.0.0.1:3087/'
 SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'

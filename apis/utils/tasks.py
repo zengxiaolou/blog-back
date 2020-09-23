@@ -3,7 +3,7 @@ AUTHOR:         zeng_xiao_yu
 GITHUB:         https://github.com/zengxiaolou
 EMAIL:          zengevent@gmail.com
 TIME:           2020/9/13-17:43
-INSTRUCTIONS:   文件简介
+INSTRUCTIONS:   异步发送邮件
 """
 from __future__ import absolute_import, unicode_literals
 
