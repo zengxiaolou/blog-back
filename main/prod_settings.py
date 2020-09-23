@@ -7,6 +7,8 @@ INSTRUCTIONS:   生产环境设置
 """
 
 # SECURITY WARNING: don't run with debug turned on in production!
+from main.keys import PROD_SQL_KEY
+
 DEBUG = False
 
 DATABASES = {
@@ -14,7 +16,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'blog',
         'USER': 'xiaolou',
-        'PASSWORD': 'zzxxyy',
+        'PASSWORD': PROD_SQL_KEY,
         'HOST': '127.0.0.1',
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8mb4',

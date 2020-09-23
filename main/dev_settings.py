@@ -26,7 +26,7 @@ DATABASES = {
 }
 
 # drf_yasg URL配置
-YASG_URL = 'http://0.0.0.0:8001/'
+YASG_URL = 'http://0.0.0.0:8000/'
 
 # 内存设置
 CACHES = {

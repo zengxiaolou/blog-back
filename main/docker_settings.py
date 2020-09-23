@@ -5,6 +5,8 @@ EMAIL:          zengevent@gmail.com
 TIME:           2020/9/20-11:29
 INSTRUCTIONS:   docker部署环境配置
 """
+from main.keys import DOCKER_SQL_KEY
+
 DEBUG = True
 
 DATABASES = {
@@ -12,7 +14,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'blog',
         'USER': 'xiaolou',
-        'PASSWORD': 'zzxxyy',
+        'PASSWORD': DOCKER_SQL_KEY,
         'HOST': 'db',
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8mb4',
