@@ -45,16 +45,8 @@ class ArticleDocumentView(BaseDocumentViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        article = Article.objects.get(id=instance.id)
-        article.views_num += 1
-        article.save()
-        try:
-            article_info = ArticleInfo.objects.get(id=1)
-            article_info.view_num += 1
-            article_info.save()
-        except Exception as e:
-            article_info = ArticleInfo(article_num=0, view_num=1, like_num=0)
-            article_info.save()
+        redis_handle.incr(REDIS_PREFIX + 'view:' + str(instance.id), amount=1)
+        redis_handle.incr(REDIS_PREFIX + "total_view", amount=1)
         return Response(serializer.data)
 
 
@@ -107,13 +99,7 @@ class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewse
         category = serializer.validated_data["category"]
         category.num += 1
         category.save()
-        try:
-            article_info = ArticleInfo.objects.get(id=1)
-            article_info.article_num += 1
-            article_info.save()
-        except Exception as e:
-            article_info = ArticleInfo(article_num=1, view_num=0, like_num=0)
-            article_info.save()
+        redis_handle.incr(REDIS_PREFIX + "total_article", amount=1)
 
 
 class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
@@ -174,12 +160,20 @@ class TagViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.Gen
     queryset = Tags.objects.all()
 
 
-class GetViewAndLikeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class GetViewAndLikeView(APIView):
     """获取文章总数、浏览总数、点赞总数"""
     authentication_classes = ()
     permission_classes = ()
-    serializer_class = ArticleInfoSerializer
-    queryset = ArticleInfo.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        try:
+            total_like = redis_handle.get(REDIS_PREFIX + "total_like")
+            total_article = redis_handle.get(REDIS_PREFIX + "total_article")
+            total_view = redis_handle.get(REDIS_PREFIX + "total_view")
+            data = {'total_like': total_like, "total_article": total_article, "total_view": total_view}
+        except Exception as e:
+            return Response({"data": str(e.args)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class GetLastYearDataView(APIView):
@@ -219,8 +213,8 @@ class LikeView(APIView):
                 article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
                 data = {"total": article_like}
             else:
-                article_total = redis_handle.get(REDIS_PREFIX + "total_like")
-                data = {"total": article_total}
+                total_like = redis_handle.get(REDIS_PREFIX + "total_like")
+                data = {"total": total_like}
         except Exception as e:
             return Response({'data': '数据查询失败'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_200_OK)
