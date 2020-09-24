@@ -11,7 +11,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import ArticleDocumentView, AddArticleViewSet, CategoryViewSet, TagViewSet, SaveArticleDraftViewSet, \
     ArticleDraftViewSet, GetTagViewSet, GetCategoryViewSet, ArchiveViewSet, HeatMapViewSet, GetViewAndLikeViewSet, \
-    GetLastYearDataView, ArticleOverViewSet
+    GetLastYearDataView, ArticleOverViewSet, LikeView
 
 router = DefaultRouter()
 
@@ -31,4 +31,5 @@ router.register('overview', ArticleOverViewSet, basename='overview')
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^last-data/$', GetLastYearDataView.as_view()),
+    url(r"^like/$", LikeView.as_view()),
 ]

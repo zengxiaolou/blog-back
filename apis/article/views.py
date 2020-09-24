@@ -1,9 +1,14 @@
+import logging
+
+from django.core.cache import cache
 from django.db.models import Count
 from django_elasticsearch_dsl_drf.filter_backends import *
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import mixins, viewsets, status, permissions, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
@@ -11,9 +16,13 @@ from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, Categor
     SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer, \
     ArticleOverViewSerializer
 from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
-import logging
+from .utils import redis_handle
+from main.settings import REDIS_PREFIX
 
 logger = logging.getLogger('mdjango')
+
+like_view_parm = [openapi.Parameter(name='user_id', in_=openapi.IN_QUERY, description='用户ID', type=openapi.TYPE_NUMBER),
+                  openapi.Parameter(name='article_id', in_=openapi.IN_QUERY, description="文章ID", type=openapi.TYPE_NUMBER)]
 
 
 class ArticleDocumentView(BaseDocumentViewSet):
@@ -187,4 +196,31 @@ class GetLastYearDataView(APIView):
                 'date': queryset
             }
         }
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class LikeView(APIView):
+    """文章点赞相关"""
+    authentication_classes = ()
+    permission_classes = ()
+
+    @swagger_auto_schema(operation_description='获取文章点赞数', manual_parameters=like_view_parm)
+    def get(self, request, *args, **kwargs):
+        """获取所有点赞数或指定文章的点赞数"""
+        article_id = request.query_params.get('article_id', '')
+        user_id = request.query_params.get('user_id')
+        article_name = "article_like:" + str(article_id)
+        try:
+            if article_id and user_id:
+                article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
+                flag = redis_handle.zrank(REDIS_PREFIX + article_name, user_id)
+                data = {"total": article_like, "flag": flag}
+            elif article_id:
+                article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
+                data = {"total": article_like}
+            else:
+                article_total = redis_handle.get(REDIS_PREFIX + "total_like")
+                data = {"total": article_total}
+        except Exception as e:
+            return Response({'data': '数据查询失败'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_200_OK)

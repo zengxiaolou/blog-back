@@ -37,7 +37,9 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {"max_connections": 100}
-        }
+        },
+        'KEY_PREFIX': 'article',                                             # 缓存key的前缀（默认空）
+        'VERSION': '1',                                                 # 缓存key的版本（默认1）
     }
 }
 
@@ -52,3 +54,8 @@ ELASTICSEARCH_DSL = {
         'hosts': 'localhost:9200'
     },
 }
+
+# redis配置
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_PREFIX = 'article:'

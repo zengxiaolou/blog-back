@@ -49,3 +49,8 @@ ELASTICSEARCH_DSL = {
         'hosts': 'es:9200'
     },
 }
+
+# redis配置
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_PREFIX = 'article:'
