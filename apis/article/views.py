@@ -15,7 +15,7 @@ from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
     SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer, \
     ArticleOverViewSerializer
-from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
+from .models import Article, Category, Tags, ArticleDraft
 from .utils import redis_handle
 from main.settings import REDIS_PREFIX
 
@@ -202,16 +202,19 @@ class LikeView(APIView):
     def get(self, request, *args, **kwargs):
         """获取所有点赞数或指定文章的点赞数"""
         article_id = request.query_params.get('article_id', '')
-        user_id = request.query_params.get('user_id')
+        user_id = request.query_params.get('user_id', '')
         article_name = "article_like:" + str(article_id)
+        view_name = "view:" + str(article_id)
         try:
             if article_id and user_id:
                 article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
+                view = redis_handle.get(REDIS_PREFIX + view_name)
                 flag = redis_handle.zrank(REDIS_PREFIX + article_name, user_id)
-                data = {"total": article_like, "flag": flag}
+                data = {"total": article_like, 'view': view, "flag": flag}
             elif article_id:
                 article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
-                data = {"total": article_like}
+                view = redis_handle.get(REDIS_PREFIX + view_name)
+                data = {"total": article_like, 'view': view}
             else:
                 total_like = redis_handle.get(REDIS_PREFIX + "total_like")
                 data = {"total": total_like}
