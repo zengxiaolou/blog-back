@@ -16,9 +16,6 @@ from apis.users.models import UserProfile
 @registry.register_document
 class ArticleDocument(Document):
     reading_time = fields.IntegerField(attr='reading_time')
-    like_user = fields.ObjectField(properties={
-        'username': fields.TextField(),
-    })
     category = fields.ObjectField(properties={
         'category': fields.TextField(),
     })
@@ -36,7 +33,7 @@ class ArticleDocument(Document):
 
     class Django:
         model = Article
-        fields = ['id', 'title', 'cover', 'summary', 'content', 'str_num', 'created', 'views_num', 'comments_num',
+        fields = ['id', 'title', 'cover', 'summary', 'content', 'str_num', 'created', 'comments_num',
                   'markdown']
         related_models = [UserProfile, Category, Tags]
 
@@ -52,9 +49,7 @@ class ArticleDocument(Document):
         The related_models option should be used with caution because it can lead in the index
         to the updating of a lot of items.
         """
-        if isinstance(related_instance, UserProfile):
-            return related_instance.article.all()
-        elif isinstance(related_instance, Category):
+        if isinstance(related_instance, Category):
             return related_instance.article.all()
         elif isinstance(related_instance, Tags):
             return related_instance.article.all()

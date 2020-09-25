@@ -13,18 +13,7 @@ from apis.article.models import Article
 user = get_user_model()
 
 
-class ArticleLikeSerializer(serializers.ModelSerializer):
+class LikeSerializer(serializers.Serializer):
     """点赞"""
-    user = serializers.PrimaryKeyRelatedField(queryset=user.objects.all(), many=True)
-
-    class Meta:
-        model = Article
-        fields = ['id', 'like_user', 'title', 'user']
-
-
-class LikeSerializer(serializers.ModelSerializer):
-    # article = ArticleLikeSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = user
-        fields = ['article']
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    like = serializers.BooleanField(required=True)

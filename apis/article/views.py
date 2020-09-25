@@ -13,10 +13,9 @@ from drf_yasg import openapi
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
-    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleInfoSerializer, \
-    ArticleOverViewSerializer
+    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleOverViewSerializer
 from .models import Article, Category, Tags, ArticleDraft
-from .utils import redis_handle
+from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
 
 logger = logging.getLogger('mdjango')
@@ -47,6 +46,22 @@ class ArticleDocumentView(BaseDocumentViewSet):
         serializer = self.get_serializer(instance)
         redis_handle.incr(REDIS_PREFIX + 'view:' + str(instance.id), amount=1)
         redis_handle.incr(REDIS_PREFIX + "total_view", amount=1)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            res = self.get_paginated_response(serializer.data)
+            for i in res.data['results']:
+                view = redis_handle.get(REDIS_PREFIX + 'view:' + str(i['id']))
+                i['view'] = view if view else 0
+                i['like'] = redis_handle.zcard(REDIS_PREFIX + 'article_like:' + str(i['id']))
+            return res
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -82,7 +97,9 @@ class ArticleOverViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             serializer = self.get_serializer(page, many=True)
             res = self.get_paginated_response(serializer.data)
             for i in res.data['results']:
-                i['like_user'] = len(i['like_user'])
+                view = redis_handle.get(REDIS_PREFIX + 'view:' + str(i['id']))
+                i['view'] = view if view else 0
+                i['like'] = redis_handle.zcard(REDIS_PREFIX + 'article_like:' + str(i['id']))
             return res
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -209,6 +226,7 @@ class LikeView(APIView):
             if article_id and user_id:
                 article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
                 view = redis_handle.get(REDIS_PREFIX + view_name)
+                view = view if view else 0
                 flag = redis_handle.zrank(REDIS_PREFIX + article_name, user_id)
                 data = {"total": article_like, 'view': view, "flag": flag}
             elif article_id:

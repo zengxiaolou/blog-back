@@ -10,7 +10,7 @@ from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework.validators import UniqueValidator
 
 from .documents import ArticleDocument, ArticleDraftDocument
-from .models import Article, Category, Tags, ArticleDraft, ArticleInfo
+from .models import Article, Category, Tags, ArticleDraft
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -83,9 +83,3 @@ class ArchiveSerializer(serializers.ModelSerializer):
         fields = ['title', 'created', 'id', 'category']
         depth = 1
 
-
-class ArticleInfoSerializer(serializers.ModelSerializer):
-    """整站信息"""
-    class Meta:
-        model = ArticleInfo
-        fields = '__all__'

@@ -7,10 +7,11 @@ INSTRUCTIONS:   用户操作
 """
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
-
+from .views import LikeViewSet
 
 router = DefaultRouter()
 
+router.register('like', LikeViewSet, basename='like')
 
 urlpatterns = [
     url('^', include(router.urls))
