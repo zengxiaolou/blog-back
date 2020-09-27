@@ -20,7 +20,7 @@ class LikeSerializer(serializers.Serializer):
     like = serializers.BooleanField(required=True)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCommentSerializers(serializers.ModelSerializer):
     """评论显示用户信息"""
     class Meta:
         model = user
@@ -28,7 +28,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """评论"""
+    """获取评论"""
+    content = serializers.CharField(min_length=1, required=True)
+    user = UserCommentSerializers(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['article', 'content', 'created', 'user']
+
+
+class CreateCommentSerializer(serializers.ModelSerializer):
+    """新增评论"""
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     content = serializers.CharField(min_length=1, required=True)
 
     class Meta:

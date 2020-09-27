@@ -3,10 +3,13 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from apis.article.models import Article
 from apis.operations.models import Comment, Reply
-from .serializers import LikeSerializer, CommentSerializer, ReplySerializer
+from .serializers import LikeSerializer, CommentSerializer, ReplySerializer, CreateCommentSerializer
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
 
@@ -33,13 +36,36 @@ class LikeViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
 
 class CommentViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    search_fields = ('article__id',)
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
 
     def get_permissions(self):
         if self.action == "list":
             return [AllowAny()]
         return [IsAuthenticated()]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CommentSerializer
+        return CreateCommentSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            res = self.get_paginated_response(serializer.data)
+            for i in res.data['results']:
+                if not i['user']['avatar']:
+                    i['user']['avatar'] = 'https://avatars1.githubusercontent.com/u/71955670?s=40&v=4'
+                if not i['user']['github']:
+                    i['user']['github'] = '未关联github'
+            return res
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ReplyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
