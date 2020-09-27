@@ -34,7 +34,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['article', 'content', 'created', 'user']
+        fields = ['id', 'article', 'content', 'created', 'user']
 
 
 class CreateCommentSerializer(serializers.ModelSerializer):
@@ -50,8 +50,18 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class ReplySerializer(serializers.ModelSerializer):
     """评论回复"""
     content = serializers.CharField(min_length=1, required=True)
+    user = UserCommentSerializers(read_only=True)
 
     class Meta:
         model = Reply
-        fields = "__all__"
-        depth = 1
+        fields = ['comment', 'reply', 'created', 'content', 'user']
+
+
+class CreateReplySerializer(serializers.ModelSerializer):
+    """新增回复"""
+    content = serializers.CharField(min_length=1, required=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Reply
+        fields = ['comment', 'reply', 'content', 'user']

@@ -9,7 +9,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from apis.article.models import Article
 from apis.operations.models import Comment, Reply
-from .serializers import LikeSerializer, CommentSerializer, ReplySerializer, CreateCommentSerializer
+from .serializers import LikeSerializer, CommentSerializer, ReplySerializer, CreateCommentSerializer, \
+    CreateReplySerializer
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
 
@@ -39,6 +40,8 @@ class CommentViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Dest
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('article__id',)
     queryset = Comment.objects.all()
+    # authentication_classes = ()
+    # permission_classes = ()
 
     def get_permissions(self):
         if self.action == "list":
@@ -69,10 +72,34 @@ class CommentViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Dest
 
 
 class ReplyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    search_fields = ('comment__id',)
     queryset = Reply.objects.all()
     serializer_class = ReplySerializer
 
     def get_permissions(self):
         if self.action == "list":
-            return [AllowAny]
-        return [IsAuthenticated]
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ReplySerializer
+        return CreateReplySerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            res = self.get_paginated_response(serializer.data)
+            for i in res.data['results']:
+                if not i['user']['avatar']:
+                    i['user']['avatar'] = 'https://avatars1.githubusercontent.com/u/71955670?s=40&v=4'
+                if not i['user']['github']:
+                    i['user']['github'] = '未关联github'
+            return res
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
