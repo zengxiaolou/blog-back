@@ -27,14 +27,25 @@ class UserCommentSerializers(serializers.ModelSerializer):
         fields = ['id', 'username', 'avatar', 'github']
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    """获取评论"""
+class ReplySerializer(serializers.ModelSerializer):
+    """评论回复"""
     content = serializers.CharField(min_length=1, required=True)
     user = UserCommentSerializers(read_only=True)
 
     class Meta:
+        model = Reply
+        fields = ['comment', 'reply', 'created', 'content', 'user']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """获取评论"""
+    content = serializers.CharField(min_length=1, required=True)
+    user = UserCommentSerializers(read_only=True)
+    reply = ReplySerializer(many=True)
+
+    class Meta:
         model = Comment
-        fields = ['id', 'article', 'content', 'created', 'user']
+        fields = ['id', 'article', 'content', 'created', 'user', 'reply']
 
 
 class CreateCommentSerializer(serializers.ModelSerializer):
@@ -45,16 +56,6 @@ class CreateCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['article', 'content', 'user']
-
-
-class ReplySerializer(serializers.ModelSerializer):
-    """评论回复"""
-    content = serializers.CharField(min_length=1, required=True)
-    user = UserCommentSerializers(read_only=True)
-
-    class Meta:
-        model = Reply
-        fields = ['comment', 'reply', 'created', 'content', 'user']
 
 
 class CreateReplySerializer(serializers.ModelSerializer):

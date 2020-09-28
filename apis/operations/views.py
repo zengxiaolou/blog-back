@@ -44,23 +44,6 @@ class GetCommentViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = ()
     serializer_class = CommentSerializer
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            res = self.get_paginated_response(serializer.data)
-            for i in res.data['results']:
-                if not i['user']['avatar']:
-                    i['user']['avatar'] = 'https://avatars1.githubusercontent.com/u/71955670?s=40&v=4'
-                if not i['user']['github']:
-                    i['user']['github'] = '未关联github'
-            return res
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = Comment.objects.all()
@@ -75,23 +58,6 @@ class GetReplyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ReplySerializer
     authentication_classes = ()
     permission_classes = ()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            res = self.get_paginated_response(serializer.data)
-            for i in res.data['results']:
-                if not i['user']['avatar']:
-                    i['user']['avatar'] = 'https://avatars1.githubusercontent.com/u/71955670?s=40&v=4'
-                if not i['user']['github']:
-                    i['user']['github'] = '未关联github'
-            return res
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 class ReplyViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):

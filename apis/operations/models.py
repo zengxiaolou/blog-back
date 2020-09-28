@@ -24,10 +24,10 @@ class Comment(models.Model):
 
 class Reply(models.Model):
     """回复"""
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comment', verbose_name="评论")
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='reply', verbose_name="评论")
     reply = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name="reply_set",
                               verbose_name="回复对象")
-    user = models.ForeignKey(user, on_delete=models.CASCADE, verbose_name="回复者")
+    user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="reply", verbose_name="回复者")
     created = models.DateTimeField(default=datetime.now, verbose_name="回复时间")
     content = models.TextField(verbose_name="回复内容")
 
