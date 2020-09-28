@@ -36,22 +36,13 @@ class LikeViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class CommentViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class GetCommentViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('article__id',)
     queryset = Comment.objects.all()
-    # authentication_classes = ()
-    # permission_classes = ()
-
-    def get_permissions(self):
-        if self.action == "list":
-            return [AllowAny()]
-        return [IsAuthenticated()]
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return CommentSerializer
-        return CreateCommentSerializer
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = CommentSerializer
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -71,21 +62,19 @@ class CommentViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Dest
         return Response(serializer.data)
 
 
-class ReplyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Comment.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CreateCommentSerializer
+
+
+class GetReplyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('comment__id',)
     queryset = Reply.objects.all()
     serializer_class = ReplySerializer
-
-    def get_permissions(self):
-        if self.action == "list":
-            return [AllowAny()]
-        return [IsAuthenticated()]
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return ReplySerializer
-        return CreateReplySerializer
+    authentication_classes = ()
+    permission_classes = ()
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -103,3 +92,9 @@ class ReplyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.Destro
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class ReplyViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Reply.objects.all()
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CreateReplySerializer

@@ -18,6 +18,9 @@ class Comment(models.Model):
     def __str__(self):
         return self.content
 
+    class Meta:
+        ordering = ['-created']
+
 
 class Reply(models.Model):
     """回复"""
@@ -30,3 +33,6 @@ class Reply(models.Model):
 
     def __str__(self):
         return self.content
+
+    class Meta:
+        ordering = ['-created']
