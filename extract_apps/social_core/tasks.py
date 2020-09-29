@@ -13,11 +13,14 @@ import requests
 
 from django.contrib.auth import get_user_model
 
+
+from apis.users.models import Github
+
 user = get_user_model()
 
 
 @shared_task
-def get_github_info(access_token: str, user_id: int):
+def get_github_info(access_token: str, user_id: int, github_id: int):
     """获取用户资料修改用户信息"""
     url = 'https://api.github.com/user'
     headers = {
@@ -26,8 +29,27 @@ def get_github_info(access_token: str, user_id: int):
     res = requests.get(url, headers=headers).json()
     avatar = res.get('avatar_url', '')
     github_url = res.get('url', '')
+    github = Github.objects.filter(github_id=github_id).first()
+    if not github:
+        github = Github()
+    github.github_id = github_id
+    github.avatar = avatar
+    github.homepage = github_url
+    github.nickname = res.get('login', '')
+    github.name = res.get('name', '')
+    github.company = res.get('company', '')
+    github.blog = res.get('blog', '')
+    github.local = res.get('local', '')
+    github.email = res.get('email', '')
+    github.followers = res.get('followers', '')
+    github.following = res.get('following', '')
+    github.created = res.get('created_at', '')
+    github.updated = res.get('updated_at', '')
+    github.save()
+
     git_user = user.objects.get(pk=user_id)
     if git_user:
         git_user.avatar = avatar
         git_user.github = github_url
+        git_user.github_info = github
         git_user.save()

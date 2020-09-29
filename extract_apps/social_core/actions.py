@@ -104,7 +104,7 @@ def do_complete(backend, login, user=None, redirect_name='next',
               backend.setting('LOGIN_REDIRECT_URL')
     response = backend.strategy.redirect(url)
     print(user.id)
-    get_github_info.delay(user.social_user.access_token, user.id)
+    get_github_info.delay(user.social_user.access_token, user.id, user.social_user.id)
     payload = jwt_payload_handler(user)
     response.set_cookie("name", user.username if user.username else user.username, max_age=24 * 3600)
     response.set_cookie("token", jwt_encode_handler(payload), max_age=24 * 3600)
