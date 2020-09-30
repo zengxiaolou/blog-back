@@ -5,19 +5,19 @@ from time import time
 
 class Github(models.Model):
     """github用户信息"""
-    github_id = models.IntegerField(unique=True)
-    avatar = models.CharField(max_length=300, verbose_name="头像")
-    nickname = models.CharField(max_length=50, verbose_name="昵称")
+    github_id = models.IntegerField(unique=True, verbose_name="githubID")
+    avatar = models.CharField(max_length=300, null=True, verbose_name="头像")
+    nickname = models.CharField(max_length=50, null=True, verbose_name="昵称")
     homepage = models.URLField(verbose_name='github主页')
-    name = models.CharField(max_length=50, verbose_name='用户昵称')
-    company = models.CharField(max_length=50, verbose_name='所属公司')
-    blog = models.CharField(max_length=100, verbose_name='用户blog')
-    local = models.CharField(max_length=50, verbose_name='地址')
-    email = models.EmailField(verbose_name='邮箱')
-    followers = models.IntegerField(verbose_name='关注')
-    followering = models.IntegerField(verbose_name='被关注')
-    created = models.CharField(max_length=50, verbose_name='创建时间')
-    updated = models.CharField(max_length=50, verbose_name='最后更新时间')
+    name = models.CharField(max_length=50, null=True, verbose_name='用户昵称')
+    company = models.CharField(max_length=50,  null=True, verbose_name='所属公司')
+    blog = models.CharField(max_length=100,  null=True, verbose_name='用户blog')
+    local = models.CharField(max_length=50,  null=True, verbose_name='地址')
+    email = models.EmailField(null=True, verbose_name='邮箱')
+    followers = models.IntegerField(verbose_name='关注', default=0, null=True)
+    following = models.IntegerField(verbose_name='被关注', default=0, null=True)
+    created = models.CharField(max_length=50, null=True, verbose_name='创建时间')
+    updated = models.CharField(max_length=50,  null=True, verbose_name='最后更新时间')
 
 
 class UserProfile(AbstractUser):

@@ -8,6 +8,8 @@ INSTRUCTIONS:   异步获取github用户信息
 
 from __future__ import absolute_import, unicode_literals
 
+from time import sleep
+
 from celery import shared_task
 import requests
 
@@ -20,7 +22,7 @@ user = get_user_model()
 
 
 @shared_task
-def get_github_info(access_token: str, user_id: int, github_id: int):
+def get_github_info(access_token: str = None, user_id: int = None, github_uid: str = None):
     """获取用户资料修改用户信息"""
     url = 'https://api.github.com/user'
     headers = {
@@ -28,11 +30,11 @@ def get_github_info(access_token: str, user_id: int, github_id: int):
     }
     res = requests.get(url, headers=headers).json()
     avatar = res.get('avatar_url', '')
-    github_url = res.get('url', '')
-    github = Github.objects.filter(github_id=github_id).first()
+    github_url = res.get('html_url', '')
+    github = Github.objects.filter(github_id=github_uid).first()
     if not github:
         github = Github()
-    github.github_id = github_id
+    github.github_id = github_uid
     github.avatar = avatar
     github.homepage = github_url
     github.nickname = res.get('login', '')
@@ -49,7 +51,8 @@ def get_github_info(access_token: str, user_id: int, github_id: int):
 
     git_user = user.objects.get(pk=user_id)
     if git_user:
-        git_user.avatar = avatar
+        if not git_user.avatar:
+            git_user.avatar = avatar
         git_user.github = github_url
         git_user.github_info = github
         git_user.save()
