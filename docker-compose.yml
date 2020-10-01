@@ -1,7 +1,7 @@
 version: "3"
 services:
   redis:
-    image: redis:3
+    image: redis:6
     container_name: redis
     command: redis-server
     volumes:
@@ -15,7 +15,7 @@ services:
     container_name: mysql
     environment:
       - MYSQL_BATABASE=blog # 数据库名称
-      - MYSQL_ROOT_PASSWORD=123456 # 数据库密码
+      - MYSQL_ROOT_PASSWORD=zzxxyy # 数据库密码
       - MYSQL_USER=xiaolou
       - MYSQL_PASSWORD=123456
     volumes:
