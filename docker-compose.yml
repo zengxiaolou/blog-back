@@ -17,7 +17,7 @@ services:
       - MYSQL_BATABASE=blog # 数据库名称
       - MYSQL_ROOT_PASSWORD=zzxxyy # 数据库密码
       - MYSQL_USER=xiaolou
-      - MYSQL_PASSWORD=123456
+      - MYSQL_PASSWORD=zzxxyy
     volumes:
       - ./deployment/mysql/data:/var/lib/mysql #挂载数据库数据
       - ./deployment/mysql/conf/my.cnf:/etc/mysql/my.cnf #关在配置文件

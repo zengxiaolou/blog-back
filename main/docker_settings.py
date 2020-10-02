@@ -13,7 +13,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'blog',
-        'USER': 'xiaolou',
+        'USER': 'root',
         'PASSWORD': DOCKER_SQL_KEY,
         'HOST': 'db',
         'PORT': 3306,
