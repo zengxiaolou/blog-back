@@ -56,7 +56,7 @@ class AddArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['summary', 'cover', 'title', 'content', 'category', 'tag', 'str_num', 'markdown']
+        fields = ['summary', 'cover', 'title', 'category', 'tag', 'str_num', 'markdown']
 
 
 class ArticleOverViewSerializer(serializers.ModelSerializer):
@@ -64,7 +64,7 @@ class ArticleOverViewSerializer(serializers.ModelSerializer):
     """文章概览"""
     class Meta:
         model = Article
-        exclude = ['content', 'markdown', 'create']
+        exclude = ['markdown', 'create']
 
 
 class SaveArticleDraftSerializer(serializers.ModelSerializer):
@@ -73,7 +73,7 @@ class SaveArticleDraftSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ArticleDraft
-        fields = ['summary', 'cover', 'title', 'content', 'user', 'id', 'category', 'tag']
+        fields = ['summary', 'cover', 'title', 'markdown', 'user', 'id', 'category', 'tag']
 
 
 class ArchiveSerializer(serializers.ModelSerializer):

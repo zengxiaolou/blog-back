@@ -38,7 +38,6 @@ class Article(models.Model):
     title = models.CharField(max_length=100, verbose_name='文章标题')
     cover = models.CharField(max_length=255, verbose_name='文章封面')
     summary = models.TextField(verbose_name="文章简介")
-    content = models.TextField(verbose_name='文章内容')
     markdown = models.TextField(verbose_name='markdown')
     created = models.DateTimeField(default=datetime.now, verbose_name="创建时间")
     create = models.DateField(default=datetime.now, verbose_name="创建日期")
@@ -65,7 +64,7 @@ class ArticleDraft(models.Model):
     title = models.CharField(max_length=100, null=True, blank=True, verbose_name='文章标题')
     cover = models.CharField(max_length=255, null=True, blank=True, verbose_name='文章封面')
     summary = models.TextField(null=True, blank=True, verbose_name="文章简介")
-    content = models.TextField(null=True,  blank=True, verbose_name='文章内容')
+    markdown = models.TextField(null=True,  blank=True, verbose_name='文章内容')
 
     def __str__(self):
         return self.title

@@ -6,6 +6,10 @@ services:
     command: redis-server
     volumes:
       - ./depends_on/redis:/data
+    privileged: true  #环境变量
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
     ports:
       - "6379:6379"
     restart: always

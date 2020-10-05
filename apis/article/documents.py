@@ -33,8 +33,7 @@ class ArticleDocument(Document):
 
     class Django:
         model = Article
-        fields = ['id', 'title', 'cover', 'summary', 'content', 'str_num', 'created', 'comments_num',
-                  'markdown']
+        fields = ['id', 'title', 'cover', 'summary', 'str_num', 'created', 'comments_num', 'markdown']
         related_models = [UserProfile, Category, Tags]
 
     def get_queryset(self):
@@ -77,7 +76,7 @@ class ArticleDraftDocument(Document):
 
     class Django:
         model = ArticleDraft
-        fields = ['id', 'title', 'cover', 'summary', 'content']
+        fields = ['id', 'title', 'cover', 'summary', 'markdown']
         related_models = [UserProfile, Category, Tags]
 
     def get_queryset(self):
