@@ -44,9 +44,9 @@ CACHES = {
 }
 
 # broker配置，使用Redis作为消息中间件
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/3'
 # backend配置，这里使用redis
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/3'
 
 # Elasticsearch configuration
 ELASTICSEARCH_DSL = {

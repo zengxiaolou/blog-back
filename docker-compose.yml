@@ -74,6 +74,21 @@ services:
       - es
     restart: always
 
+  celery:
+    build: .
+    volumes:
+      - .:/project
+    command: celery -A main worker -l info
+    links:
+      - redis
+      - db
+      - es
+    depends_on:
+      - redis
+      - db
+      - es
+    restart: always
+
   nginx:
     build: deployment/nginx
     ports:
