@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, mixins, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -64,3 +64,20 @@ class EmailView(APIView):
             return Response({"data": "邮件已发送", "task_id": res.task_id}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PhoneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """手机短信"""
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = SmsSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        mobile = serializer.validated_data["mobile"]
+        code = generate_code()
+        tasks.send_sms.delay(mobile=mobile, code=code)
+        cache.set('sms' + mobile, code, 300)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
