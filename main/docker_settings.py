@@ -24,7 +24,7 @@ DATABASES = {
 }
 
 # drf_yasg URL配置
-YASG_URL = 'http://www.messstack.com/'
+YASG_URL = 'http://blog.messstack.com/'
 
 # 内存设置
 CACHES = {
