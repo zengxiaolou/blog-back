@@ -76,9 +76,11 @@ services:
 
   celery:
     build: .
+    ports:
+      - 456:456
     volumes:
       - .:/project
-    command: celery -A main worker -l info
+    command: celery worker -A main -l info
     links:
       - redis
       - db
@@ -92,10 +94,8 @@ services:
   nginx:
     build: deployment/nginx
     ports:
-      - '80:80'
-      - "443:443"
-    expose:
-      - "8000"
+      - 80:80
+      - 443:443
     volumes:
       - ./static:/usr/share/nginx/html/static #挂载静态文件
       - ./media:/usr/share/nginx/html/media #上传文件
