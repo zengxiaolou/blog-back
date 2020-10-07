@@ -30,13 +30,15 @@ logger = logging.getLogger('mdjango')
 @shared_task
 def send_mails(theme: str, code: str, account: str):
     """发送邮件"""
-    send_mail(
+    logger.debug("开始发送短信")
+    res = send_mail(
         theme,
         '您的验证码为\n ' + code + "\n有效期为5分钟",
         '18328457630@163.com',
         ['18328457630@163.com', account],
         fail_silently=False
     )
+    logger.debug(res)
 
 
 @shared_task
