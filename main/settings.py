@@ -171,7 +171,7 @@ LOGGING = {
     },
     'loggers': {  # 记录器
         'mdjango': {
-            'handlers': ['console'],
+            'handlers': ['console', 'fileHandler'],
             'level': 'INFO',
             'propagate': False
         }
@@ -235,10 +235,12 @@ JWT_AUTH = {
 # 手机号正则表达式
 REGEX_MOBILE = "^1[354789]\d{9}$|^147\d{8}$|^176\d{8}$"
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.163.com'  # 发送邮件的服务器地址
 EMAIL_HOST_USER = KEY_EMAIL_HOST_USER  # 不含‘@126.com’的后缀
 EMAIL_HOST_PASSWORD = KEY_EMAIL_HOST_PASSWORD  # 非邮箱登录密码
-EMAIL_PORT = 25
+EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = '小楼的破栈<18328457630@163.com>'
 
 # 结果序列化方案
