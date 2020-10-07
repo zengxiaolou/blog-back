@@ -1,6 +1,5 @@
 import logging
 
-from django.core.cache import cache
 from django.db.models import Count
 from django_elasticsearch_dsl_drf.filter_backends import *
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
@@ -105,7 +104,8 @@ class ArticleOverViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Response(serializer.data)
 
 
-class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                        viewsets.GenericViewSet):
     """新增文章相关"""
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AddArticleSerializer
