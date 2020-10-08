@@ -12,7 +12,8 @@ from drf_yasg import openapi
 from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
-    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleOverViewSerializer
+    SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleOverViewSerializer, \
+    ArticleContentSerializer
 from .models import Article, Category, Tags, ArticleDraft
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
@@ -104,12 +105,16 @@ class ArticleOverViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Response(serializer.data)
 
 
-class AddArticleViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                        viewsets.GenericViewSet):
+class AddArticleViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
+                        mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """新增文章相关"""
     permission_classes = (permissions.IsAdminUser,)
-    serializer_class = AddArticleSerializer
     queryset = Article.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ArticleContentSerializer
+        return AddArticleSerializer
 
     def perform_create(self, serializer):
         serializer.save()

@@ -59,6 +59,14 @@ class AddArticleSerializer(serializers.ModelSerializer):
         fields = ['summary', 'cover', 'title', 'category', 'tag', 'str_num', 'markdown']
 
 
+class ArticleContentSerializer(serializers.ModelSerializer):
+    """获取文章内容"""
+    class Meta:
+        model = Article
+        fields = ['summary', 'cover', 'title', 'category', 'tag', 'markdown']
+        depth = 1
+
+
 class ArticleOverViewSerializer(serializers.ModelSerializer):
     reading_time = serializers.IntegerField()
     """文章概览"""
