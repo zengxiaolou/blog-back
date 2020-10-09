@@ -13,7 +13,7 @@ from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
     SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleOverViewSerializer, \
-    ArticleContentSerializer, ArticleCategoryTagsSerializer
+    ArticleContentSerializer, ArticleCategoryTagsSerializer, ArticleTagSerializer
 from .models import Article, Category, Tags, ArticleDraft
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
@@ -243,7 +243,16 @@ class LikeView(APIView):
 
 
 class ArticleCategoryTagViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """获取指定文章的分类和标签"""
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ArticleCategoryTagsSerializer
+    queryset = Article.objects.all()
+
+
+class ArticleUpdateTagViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """更新文章的标签"""
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = ArticleTagSerializer
     queryset = Article.objects.all()
