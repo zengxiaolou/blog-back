@@ -132,3 +132,5 @@ apis/utils/migrations/*
 !apis/utils/migrations/__init__.py
 
 keys.py
+#deployment/es/data/
+#deployment/es/logs
