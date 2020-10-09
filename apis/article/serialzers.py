@@ -63,7 +63,7 @@ class ArticleContentSerializer(serializers.ModelSerializer):
     """获取文章内容"""
     class Meta:
         model = Article
-        fields = ['summary', 'cover', 'title', 'category', 'tag', 'markdown']
+        fields = ['summary', 'cover', 'title', 'category', 'tag', 'markdown', 'str_num']
         depth = 1
 
 
@@ -91,3 +91,19 @@ class ArchiveSerializer(serializers.ModelSerializer):
         fields = ['title', 'created', 'id', 'category']
         depth = 1
 
+
+class ArticleCategoryTagsSerializer(serializers.ModelSerializer):
+    """获取指定文章的标签与分类"""
+
+    class Meta:
+        model = Article
+        fields = ['id', 'category', 'tag']
+        depth = 1
+
+
+class ArticleTagSerializer(serializers.ModelSerializer):
+    """用户为文章添加标签"""
+
+    class Meta:
+        model = Article
+        fields = ['tag']

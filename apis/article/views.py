@@ -13,7 +13,7 @@ from apis.utils.pagination import MyPageNumberPagination
 from .documents import ArticleDocument, ArticleDraftDocument
 from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, CategorySerializer, TagsSerializer, \
     SaveArticleDraftSerializer, ArticleDraftDocumentSerializer, ArchiveSerializer, ArticleOverViewSerializer, \
-    ArticleContentSerializer
+    ArticleContentSerializer, ArticleCategoryTagsSerializer
 from .models import Article, Category, Tags, ArticleDraft
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
@@ -112,7 +112,7 @@ class AddArticleViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixi
     queryset = Article.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
+        if self.action == 'retrieve' or self.action == 'update':
             return ArticleContentSerializer
         return AddArticleSerializer
 
@@ -172,12 +172,8 @@ class GetTagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class TagViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """标签管理"""
-
-    def get_permissions(self):
-        if self.action == 'list':
-            return [permissions.AllowAny()]
-        return [permissions.IsAdminUser()]
-
+    authentication_classes = ()
+    permission_classes = ()
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
 
@@ -244,3 +240,10 @@ class LikeView(APIView):
         except Exception as e:
             return Response({'data': '数据查询失败'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_200_OK)
+
+
+class ArticleCategoryTagViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = ArticleCategoryTagsSerializer
+    queryset = Article.objects.all()
