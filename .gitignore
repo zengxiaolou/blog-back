@@ -134,3 +134,5 @@ apis/utils/migrations/*
 keys.py
 deployment/es/data/
 deployment/es/logs/
+
+art*.log
