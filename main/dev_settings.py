@@ -38,8 +38,8 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {"max_connections": 100}
         },
-        'KEY_PREFIX': 'article',                                             # 缓存key的前缀（默认空）
-        'VERSION': '1',                                                 # 缓存key的版本（默认1）
+        # 'KEY_PREFIX': 'article',                                             # 缓存key的前缀（默认空）
+        # 'VERSION': '1',                                                 # 缓存key的版本（默认1）
     }
 }
 

@@ -1,8 +1,7 @@
 from rest_framework import mixins, viewsets, status
 from django.contrib.auth import get_user_model
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -50,6 +49,10 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets
     permission_classes = (IsAuthenticated, )
     serializer_class = CreateCommentSerializer
 
+    def perform_create(self, serializer):
+        redis_handle.incr(REDIS_PREFIX + 'article_comment:' + str(serializer.validated_data['article'].id), amount=1)
+        serializer.save()
+
 
 class GetReplyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
@@ -64,3 +67,9 @@ class ReplyViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.G
     queryset = Reply.objects.all()
     permission_classes = (IsAuthenticated, )
     serializer_class = CreateReplySerializer
+
+    def perform_create(self, serializer):
+        redis_handle.incr(REDIS_PREFIX + 'article_comment:' + str(serializer.validated_data['comment'].article.id),
+                          amount=1)
+        serializer.save()
+

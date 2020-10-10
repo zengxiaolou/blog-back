@@ -59,6 +59,8 @@ class ArticleDocumentView(BaseDocumentViewSet):
             res = self.get_paginated_response(serializer.data)
             for i in res.data['results']:
                 view = redis_handle.get(REDIS_PREFIX + 'view:' + str(i['id']))
+                comment = redis_handle.get(REDIS_PREFIX + 'article_comment:' + str(i['id']))
+                i['comment'] = comment if comment else 0
                 i['view'] = view if view else 0
                 i['like'] = redis_handle.zcard(REDIS_PREFIX + 'article_like:' + str(i['id']))
             return res
@@ -100,6 +102,8 @@ class ArticleOverViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             res = self.get_paginated_response(serializer.data)
             for i in res.data['results']:
                 view = redis_handle.get(REDIS_PREFIX + 'view:' + str(i['id']))
+                comment = redis_handle.get(REDIS_PREFIX + 'article_comment:' + str(i['id']))
+                i['comment'] = comment if comment else 0
                 i['view'] = view if view else 0
                 i['like'] = redis_handle.zcard(REDIS_PREFIX + 'article_like:' + str(i['id']))
             return res
@@ -228,14 +232,18 @@ class LikeView(APIView):
         try:
             if article_id and user_id:
                 article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
+                comment = redis_handle.get(REDIS_PREFIX + 'article_comment:' + str(article_id))
+                comment = comment if comment else 0
                 view = redis_handle.get(REDIS_PREFIX + view_name)
                 view = view if view else 0
                 flag = redis_handle.zrank(REDIS_PREFIX + article_name, user_id)
-                data = {"total": article_like, 'view': view, "flag": flag}
+                data = {"total": article_like, 'view': view, "flag": flag, 'comment': comment}
             elif article_id:
                 article_like = redis_handle.zcard(REDIS_PREFIX + article_name)
                 view = redis_handle.get(REDIS_PREFIX + view_name)
-                data = {"total": article_like, 'view': view}
+                comment = redis_handle.get(REDIS_PREFIX + 'article_comment:' + str(article_id))
+                comment = comment if comment else 0
+                data = {"total": article_like, 'view': view,  'comment': comment}
             else:
                 total_like = redis_handle.get(REDIS_PREFIX + "total_like")
                 data = {"total": total_like}

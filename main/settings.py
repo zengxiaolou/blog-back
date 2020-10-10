@@ -89,7 +89,7 @@ AUTH_USER_MODEL = 'users.UserProfile'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'dist')],
+        # 'DIRS': [os.path.join(BASE_DIR, 'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -266,8 +266,6 @@ SWAGGER_SETTINGS = {
 QINIU_ACCESS_KEY = KEY_QINIU_ACCESS_KEY
 QINIU_SECRET_KEY = KEY_QINIU_SECRET_KEY
 QINIU_BUCKET_NAME = KEY_QINIU_BUCKET_NAME
-
-
 
 
 # Elasticsearch configuration
