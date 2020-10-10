@@ -24,7 +24,7 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 
 from main.settings import TENCENT_SECRETID, TENCENT_SECRETKEY, TENCENT_SMSSDKAPPID, TENCENT_SIGN, TENCENT_TEMPLATEID
 
-logger = logging.getLogger('mdjango')
+logger = logging.getLogger('django_log')
 
 
 @shared_task

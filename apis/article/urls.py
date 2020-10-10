@@ -11,7 +11,8 @@ from rest_framework.routers import DefaultRouter
 
 from .views import ArticleDocumentView, AddArticleViewSet, CategoryViewSet, TagViewSet, SaveArticleDraftViewSet, \
     ArticleDraftViewSet, GetTagViewSet, GetCategoryViewSet, ArchiveViewSet, HeatMapViewSet, GetViewAndLikeView, \
-    GetLastYearDataView, ArticleOverViewSet, LikeView, ArticleCategoryTagViewSet, ArticleUpdateTagViewSet
+    GetLastYearDataView, ArticleOverViewSet, LikeView, ArticleCategoryTagViewSet, ArticleUpdateTagViewSet, \
+    CheckTagExistView
 
 router = DefaultRouter()
 
@@ -34,4 +35,5 @@ urlpatterns = [
     url(r'^last-data/$', GetLastYearDataView.as_view()),
     url(r"^like/$", LikeView.as_view()),
     url(r"^info/$", GetViewAndLikeView.as_view()),
+    url(r"^check-tag/$", CheckTagExistView.as_view())
 ]

@@ -18,10 +18,12 @@ from .models import Article, Category, Tags, ArticleDraft
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX
 
-logger = logging.getLogger('mdjango')
+logger = logging.getLogger('django_log')
 
 like_view_parm = [openapi.Parameter(name='user_id', in_=openapi.IN_QUERY, description='用户ID', type=openapi.TYPE_NUMBER),
                   openapi.Parameter(name='article_id', in_=openapi.IN_QUERY, description="文章ID", type=openapi.TYPE_NUMBER)]
+
+tag_param = [openapi.Parameter(name='tag', in_=openapi.IN_QUERY, description="标签名称", type=openapi.TYPE_STRING)]
 
 
 class ArticleDocumentView(BaseDocumentViewSet):
@@ -256,3 +258,20 @@ class ArticleUpdateTagViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     permission_classes = ()
     serializer_class = ArticleTagSerializer
     queryset = Article.objects.all()
+
+
+class CheckTagExistView(APIView):
+    """判断标签是否已经存在"""
+    authentication_classes = ()
+    permission_classes = ()
+
+    @swagger_auto_schema(operation_description='查询标签是否存在', manual_parameters=tag_param)
+    def get(self, request, *args, **kwargs):
+        tag_name = request.query_params.get('tag', '')
+        if tag_name:
+            tag = Tags.objects.filter(tag=tag_name).first()
+            if not tag:
+                tag = Tags(tag=tag_name)
+                tag.save()
+            return Response({'results': tag.id}, status=status.HTTP_200_OK)
+        return Response({'result': False}, status=status.HTTP_400_BAD_REQUEST)

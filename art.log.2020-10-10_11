@@ -1,0 +1,84 @@
+[2020-10-10 11:54:08] autoreload.py 222 ==> /Users/ruler/Documents/all_project/blog/blog_back/main/apis/article/urls.py changed, reloading.
+[2020-10-10 11:54:11] autoreload.py 598 ==> Watching for file changes with StatReloader
+[2020-10-10 11:54:17] basehttp.py 157 ==> "GET /docs/ HTTP/1.1" 200 2222
+[2020-10-10 11:54:17] basehttp.py 157 ==> "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 200 628
+[2020-10-10 11:54:17] basehttp.py 157 ==> "GET /docs/?format=openapi HTTP/1.1" 200 33057
+[2020-10-10 11:54:46] basehttp.py 157 ==> "OPTIONS /api/v1/article/check-tag/?tag=%E6%9C%89%E7%94%A8 HTTP/1.1" 200 0
+[2020-10-10 11:54:46] basehttp.py 157 ==> "GET /api/v1/article/check-tag/?tag=%E6%9C%89%E7%94%A8 HTTP/1.1" 200 16
+[2020-10-10 11:54:59] basehttp.py 157 ==> "OPTIONS /api/v1/article/check-tag/ HTTP/1.1" 200 0
+[2020-10-10 11:54:59] log.py 228 ==> Internal Server Error: /api/v1/article/check-tag/
+Traceback (most recent call last):
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/utils/datastructures.py", line 76, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'tag'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/apis/article/views.py", line 270, in get
+    tag_name = request.query_params['tag']
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/utils/datastructures.py", line 78, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'tag'
+[2020-10-10 11:54:59] basehttp.py 157 ==> "GET /api/v1/article/check-tag/ HTTP/1.1" 500 23050
+[2020-10-10 11:55:56] autoreload.py 222 ==> /Users/ruler/Documents/all_project/blog/blog_back/main/apis/article/views.py changed, reloading.
+[2020-10-10 11:55:58] autoreload.py 598 ==> Watching for file changes with StatReloader
+[2020-10-10 11:56:03] log.py 228 ==> Internal Server Error: /api/v1/article/check-tag/
+Traceback (most recent call last):
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/utils/datastructures.py", line 76, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'tag'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/apis/article/views.py", line 270, in get
+    tag_name = request.query_params['tag']
+  File "/Users/ruler/Documents/all_project/blog/blog_back/main/venv/lib/python3.7/site-packages/django/utils/datastructures.py", line 78, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'tag'
+[2020-10-10 11:56:03] basehttp.py 157 ==> "GET /api/v1/article/check-tag/ HTTP/1.1" 500 23050
+[2020-10-10 11:56:31] autoreload.py 222 ==> /Users/ruler/Documents/all_project/blog/blog_back/main/apis/article/views.py changed, reloading.
+[2020-10-10 11:56:33] autoreload.py 598 ==> Watching for file changes with StatReloader
+[2020-10-10 11:56:36] log.py 228 ==> Bad Request: /api/v1/article/check-tag/
+[2020-10-10 11:56:36] basehttp.py 157 ==> "GET /api/v1/article/check-tag/ HTTP/1.1" 400 34
+[2020-10-10 11:58:14] autoreload.py 222 ==> /Users/ruler/Documents/all_project/blog/blog_back/main/apis/article/views.py changed, reloading.
+[2020-10-10 11:58:16] autoreload.py 598 ==> Watching for file changes with StatReloader
+[2020-10-10 11:58:18] log.py 228 ==> Bad Request: /api/v1/article/check-tag/
+[2020-10-10 11:58:18] basehttp.py 157 ==> "GET /api/v1/article/check-tag/ HTTP/1.1" 400 16

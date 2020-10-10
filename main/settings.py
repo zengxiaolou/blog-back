@@ -170,7 +170,7 @@ LOGGING = {
 
     },
     'loggers': {  # 记录器
-        'mdjango': {
+        'django_log': {
             'handlers': ['console', 'fileHandler'],
             'level': 'INFO',
             'propagate': False
