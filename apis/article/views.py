@@ -151,6 +151,7 @@ class ArticleDraftViewSet(BaseDocumentViewSet):
 
 
 class GetCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """获取分类"""
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
     serializer_class = CategorySerializer
@@ -170,6 +171,7 @@ class CategoryViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewset
 
 
 class GetTagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """获取标签"""
     authentication_classes = []
     permission_classes = [permissions.AllowAny]
     serializer_class = TagsSerializer

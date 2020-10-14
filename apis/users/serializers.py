@@ -14,16 +14,15 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """
-        用户信息
-    """
+    """用户信息"""
+    id = serializers.IntegerField(read_only=True)
     sms = serializers.CharField(max_length=6, min_length=6, required=True, write_only=True)
     mobile = serializers.CharField(max_length=11, min_length=11, required=True)
     password = serializers.CharField(max_length=20, min_length=8, required=True, write_only=True)
     username = serializers.CharField(max_length=20, min_length=3, required=True)
     is_staff = serializers.BooleanField(read_only=True)
     avatar = serializers.CharField(max_length=150, min_length=10, read_only=True)
-
+    email = serializers.EmailField(required=False)
 
     @staticmethod
     def validate_username(username):
@@ -83,6 +82,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'sms', 'mobile', 'password', "is_staff", 'avatar')
-
+        fields = ('id', 'username', 'sms', 'mobile', 'password', "is_staff", 'avatar', 'email')
 
