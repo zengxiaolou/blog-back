@@ -30,6 +30,7 @@ class UserProfile(AbstractUser):
     github = models.CharField(max_length=50, default="未绑定", verbose_name="github账号")
     github_info = models.ForeignKey(Github, on_delete=models.CASCADE, null=True, verbose_name='github信息')
     is_black = models.BooleanField(default=False, verbose_name='拉黑用户')
+    nickname = models.CharField(max_length=10, default='', verbose_name="昵称")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -23,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_staff = serializers.BooleanField(read_only=True)
     avatar = serializers.CharField(max_length=150, min_length=10, read_only=True)
     email = serializers.EmailField(required=False)
+    nickname = serializers.CharField(required=False)
 
     @staticmethod
     def validate_username(username):
@@ -82,5 +83,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'sms', 'mobile', 'password', "is_staff", 'avatar', 'email')
+        fields = ('id', 'username', 'sms', 'mobile', 'password', "is_staff", 'avatar', 'email', 'nickname')
 
