@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'', include(router.urls)),
     url(r'^check-captcha/$', CheckCaptcha.as_view()),
     url(r'^qiniu-token/$', GetQiNiuToken.as_view()),
-    url(r'^get-sms/$', EmailView.as_view())
+    url(r'^get-sms/$', EmailView.as_view()),
+    url(r'^verify/$', VerifyView.as_view())
 ]

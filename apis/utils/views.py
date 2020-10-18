@@ -51,7 +51,7 @@ class EmailView(APIView):
 
     @swagger_auto_schema(request_body=EmailSerializer, responses={201: EmailSerializer})
     def post(self, request, *args, **kwargs):
-        res = request.data.get('reset', False)
+        res = request.data.get('reset', '')
         if res:
             serializer = ResetEmailSerializer(data=request.data)
         else:
@@ -81,3 +81,16 @@ class PhoneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         cache.set('sms' + mobile, code, 300)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class VerifyView(APIView):
+    """验证验证码是否正确"""
+
+    @swagger_auto_schema(request_body=VerifySerializer, responses={200: VerifySerializer})
+    def post(self, request, *args, **kwargs):
+        request.data['id'] = request.user.id
+        serializer = VerifySerializer
+        if serializer.is_valid():
+            cache.set('verify' + request.user.id, 1, 600)
+            return Response({'result': '身份验证通过，可以继续下一步操作'}, status=status.HTTP_200_OK)
+        return Response({'result': '身份验证失败'}, status=status.HTTP_400_BAD_REQUEST)

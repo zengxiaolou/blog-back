@@ -68,3 +68,30 @@ class SmsSerializer(serializers.Serializer):
             raise serializers.ValidationError("距上一次发送未超过60s")
 
         return mobile
+
+
+class VerifySerializer(serializers.Serializer):
+    """身份验证"""
+    method = serializers.CharField(min_length=5, max_length=6, required=True)
+    code = serializers.CharField(min_length=6, max_length=6, required=True)
+
+    @staticmethod
+    def validate_method(method):
+        """验证方法"""
+        if method != 'email' or method != 'mobile':
+            raise serializers.ValidationError('验证方法不正确')
+        return method
+
+    def validate_code(self, code):
+        """验证验证码"""
+        if self.initial_data.method == 'email':
+            account = User.objects.get(id=self.initial_data.id).email
+        else:
+            account = User.objects.get(id=self.initial_data.id).mobile
+        init_code = cache.get('sms' + account)
+        if init_code == 0:
+            raise serializers.ValidationError('验证码已过期，请重新获取')
+        elif init_code != code:
+            raise serializers.ValidationError('验证码错误，请重新获取')
+        cache.delete('sms' + account)
+        return code
