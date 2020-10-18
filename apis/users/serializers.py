@@ -91,12 +91,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     """更新用户信息"""
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    code = serializers.CharField(max_length=6, min_length=6, required=False, write_only=True)
     email = serializers.EmailField(max_length=30, min_length=5, required=False)
     mobile = serializers.CharField(max_length=11, min_length=11, required=False)
     nickname = serializers.CharField(max_length=8, min_length=1, required=False)
     avatar = serializers.CharField(max_length=300, min_length=10, required=False)
     password = serializers.CharField(max_length=10, min_length=8, write_only=True, required=False)
+
 
     @staticmethod
     def validate_password(password):
@@ -130,9 +131,48 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         if User.objects.filter(mobile=mobile).first():
             res = self.initial_data.get('reset', False)
             if not res:
-                raise serializers.ValidationError("手机号已被注册")
+                raise serializers.ValidationError("手机号已被绑定")
+
+        code = self.initial_data.get('code', '')
+        if code:
+            init_code = cache.get('sms' + mobile)
+            if init_code == 0:
+                raise serializers.ValidationError('验证码过期，请重新获取')
+            elif init_code != code:
+                raise serializers.ValidationError('验证码错误，请重新获取')
+            cache.delete('sms' + mobile)
+        else:
+            raise serializers.ValidationError('请输入短信验证码')
+
         return mobile
+
+    def validate_email(self, email):
+        """检验邮箱是否合规"""
+        # 邮箱已被绑定
+        if User.objects.filter(email=email).first():
+            res = self.initial_data.get('reset', False)
+            if not res:
+                raise serializers.ValidationError("邮箱已被绑定")
+
+        code = self.initial_data.get('code', '')
+        if code:
+            init_code = cache.get('email' + email)
+            if init_code == 0:
+                raise serializers.ValidationError('验证码过期，请重新获取')
+            elif init_code != code:
+                raise serializers.ValidationError('验证码错误，请重新获取')
+            cache.delete('email' + email)
+        else:
+            raise serializers.ValidationError('请输入邮箱验证码')
+
+        return email
+
+    def validate(self, attrs):
+        """删除sms字段"""
+        if attrs.get('code', ''):
+            del attrs['code']
+        return attrs
 
     class Meta:
         model = User
-        fields = ['nickname', 'mobile', 'password', 'avatar', 'email', 'user']
+        fields = ['nickname', 'mobile', 'password', 'avatar', 'email', 'code']

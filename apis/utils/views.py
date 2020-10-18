@@ -89,8 +89,9 @@ class VerifyView(APIView):
     @swagger_auto_schema(request_body=VerifySerializer, responses={200: VerifySerializer})
     def post(self, request, *args, **kwargs):
         request.data['id'] = request.user.id
-        serializer = VerifySerializer
+        serializer = VerifySerializer(data=request.data)
         if serializer.is_valid():
-            cache.set('verify' + request.user.id, 1, 600)
+            cache.set('verify' + str(request.user.id), '1', 600)
             return Response({'result': '身份验证通过，可以继续下一步操作'}, status=status.HTTP_200_OK)
-        return Response({'result': '身份验证失败'}, status=status.HTTP_400_BAD_REQUEST)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

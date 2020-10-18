@@ -51,13 +51,13 @@ class SmsSerializer(serializers.Serializer):
     """手机短信"""
     mobile = serializers.CharField(max_length=11, min_length=11, required=True)
 
-    @staticmethod
-    def validate_mobile(mobile):
+    def validate_mobile(self, mobile):
         """验证手机号"""
 
         # 手机号是否注册
         if User.objects.filter(mobile=mobile).count():
-            raise serializers.ValidationError("该手机号已注册")
+            if self.initial_data.get('rest', ''):
+                raise serializers.ValidationError("该手机号已注册")
 
         # 验证手机号是否合法
         if not re.match(REGEX_MOBILE, mobile):
@@ -78,20 +78,22 @@ class VerifySerializer(serializers.Serializer):
     @staticmethod
     def validate_method(method):
         """验证方法"""
-        if method != 'email' or method != 'mobile':
+        if method != 'email' and method != 'mobile':
             raise serializers.ValidationError('验证方法不正确')
         return method
 
     def validate_code(self, code):
         """验证验证码"""
-        if self.initial_data.method == 'email':
-            account = User.objects.get(id=self.initial_data.id).email
+        if self.initial_data['method'] == 'email':
+            account = User.objects.get(id=self.initial_data['id']).email
+            prefix = 'email'
         else:
-            account = User.objects.get(id=self.initial_data.id).mobile
-        init_code = cache.get('sms' + account)
+            account = User.objects.get(id=self.initial_data['id']).mobile
+            prefix = 'sms'
+        init_code = cache.get(prefix + account)
         if init_code == 0:
             raise serializers.ValidationError('验证码已过期，请重新获取')
         elif init_code != code:
             raise serializers.ValidationError('验证码错误，请重新获取')
-        cache.delete('sms' + account)
+        cache.delete(prefix + account)
         return code
