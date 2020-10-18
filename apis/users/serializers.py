@@ -86,7 +86,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'sms', 'mobile', 'password', "is_staff", 'avatar', 'email', 'nickname',)
+        fields = ('id', 'username', 'sms', 'mobile', 'password', "is_staff", 'avatar', 'email', 'nickname',
+                  'github_info')
+        depth = 1
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
@@ -176,3 +178,4 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['nickname', 'mobile', 'password', 'avatar', 'email', 'code']
+        depth = 1
