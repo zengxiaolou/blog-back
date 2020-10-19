@@ -9,6 +9,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from apis.article.models import Article
+from apis.article.serialzers import ArchiveSerializer
 from apis.operations.models import Comment, Reply
 
 user = get_user_model()
@@ -42,6 +43,7 @@ class CommentSerializer(serializers.ModelSerializer):
     content = serializers.CharField(min_length=1, required=True)
     user = UserCommentSerializers(read_only=True)
     reply = ReplySerializer(many=True)
+    article = ArchiveSerializer()
 
     class Meta:
         model = Comment
