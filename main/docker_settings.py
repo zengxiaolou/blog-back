@@ -54,3 +54,4 @@ ELASTICSEARCH_DSL = {
 REDIS_HOST = 'redis'
 REDIS_PORT = 6379
 REDIS_PREFIX = 'article:'
+USER_PREFIX = 'user:'
