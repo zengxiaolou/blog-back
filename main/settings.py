@@ -273,6 +273,8 @@ ELASTICSEARCH_INDEX_NAME = {
     'apis.article.documents': "article"
 }
 
+USE_X_FORWARDED_HOST = True
+
 # social_setting
 AUTHENTICATION_BACKENDS = (
     'apis.users.utils.CustomBackend',

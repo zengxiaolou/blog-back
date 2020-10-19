@@ -42,6 +42,7 @@ class LikeViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
 
 class GetCommentViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """获取评论列表"""
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     filter_fields = ('user__id',)
     search_fields = ('article__id',)
