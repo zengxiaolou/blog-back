@@ -7,7 +7,8 @@ INSTRUCTIONS:   用户操作
 """
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
-from .views import LikeViewSet, CommentViewSet, ReplyViewSet, GetCommentViewSet, GetReplyViewSet, UserLikeView
+from .views import LikeViewSet, CommentViewSet, ReplyViewSet, GetCommentViewSet, GetReplyViewSet, UserLikeView, \
+    CommentLikeViewSet
 
 router = DefaultRouter()
 
@@ -16,6 +17,7 @@ router.register('comments', GetCommentViewSet, basename='comment')
 router.register('comment', CommentViewSet, basename='comment')
 router.register('reply', ReplyViewSet, basename='reply')
 router.register('replys', GetReplyViewSet, basename='reply')
+router.register('comment-like', CommentLikeViewSet, basename='comment-like')
 
 urlpatterns = [
     url('^', include(router.urls)),

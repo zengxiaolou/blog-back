@@ -68,3 +68,8 @@ class CreateReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Reply
         fields = ['comment', 'reply', 'content', 'user']
+
+
+class CommentLikeSerializer(serializers.Serializer):
+    """用户点赞评论"""
+    comment_id = serializers.IntegerField(required=True)

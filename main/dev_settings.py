@@ -60,3 +60,4 @@ REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_PREFIX = 'article:'
 USER_PREFIX = 'user:'
+COMMENT_PREFIX = 'comment:'

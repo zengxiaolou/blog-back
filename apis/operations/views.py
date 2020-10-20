@@ -11,9 +11,9 @@ from rest_framework.views import APIView
 from apis.article.models import Article
 from apis.operations.models import Comment, Reply
 from .serializers import LikeSerializer, CommentSerializer, ReplySerializer, CreateCommentSerializer, \
-    CreateReplySerializer
+    CreateReplySerializer, CommentLikeSerializer
 from apis.utils.utils.other import redis_handle
-from main.settings import REDIS_PREFIX, USER_PREFIX
+from main.settings import REDIS_PREFIX, USER_PREFIX, COMMENT_PREFIX
 from ..article.serialzers import ArchiveSerializer
 from ..utils.pagination import MyPageNumberPagination
 
@@ -50,6 +50,22 @@ class GetCommentViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = CommentSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            res = self.get_paginated_response(serializer.data)
+            for i in res.data['results']:
+                name = COMMENT_PREFIX + 'like:' + str(i['id'])
+                i['comment_like'] = redis_handle.zcard(name)
+                i['is_like'] = True if request.user and redis_handle.exists(name) else False
+            return res
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -100,3 +116,18 @@ class UserLikeView(APIView):
             return Page.get_paginated_response(serializer.data)
         serializer = ArchiveSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CommentLikeViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """用户对评论进行点赞和取消点赞"""
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentLikeSerializer
+
+    def perform_create(self, serializer):
+        comment_id = serializer.validated_data['comment_id']
+        redis_handle.zadd(COMMENT_PREFIX + 'like:' + str(comment_id), {self.request.user.id: 0})
+
+    def destroy(self, request, *args, **kwargs):
+        comment_id = kwargs['pk']
+        redis_handle.zrem(COMMENT_PREFIX + 'like:' + str(comment_id), self.request.user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
