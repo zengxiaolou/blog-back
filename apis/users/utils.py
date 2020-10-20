@@ -25,7 +25,8 @@ def generate_code() -> str:
 
 def jwt_response_payload_handler(token: str, user=None, request=None):
     """为返回的结果添加用户相关信息"""
-    return {'token': token, 'username': user.username, 'id': user.id, 'role': user.is_superuser, 'nickname': user.nickname}
+    return {'token': token, 'username': user.username, 'id': user.id, 'role': user.is_superuser,
+            'nickname': user.nickname}
 
 
 class CustomBackend(ModelBackend):
