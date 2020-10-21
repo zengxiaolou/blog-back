@@ -15,10 +15,10 @@ class StatisticsView(APIView):
 
     def get(self, request, *args, **kwargs):
         today = datetime.date.today()
-        total_view = redis_handle.get(REDIS_PREFIX + 'total_view')
-        total_like = redis_handle.get(REDIS_PREFIX + 'total_like')
-        total_user = redis_handle.get(COUNT_PREFIX + 'users')
-        total_comment = redis_handle.get(COUNT_PREFIX + 'comments')
+        total_view = redis_handle.get(REDIS_PREFIX + 'total_view') or 0
+        total_like = redis_handle.get(REDIS_PREFIX + 'total_like') or 0
+        total_user = redis_handle.get(COUNT_PREFIX + 'users') or 0
+        total_comment = redis_handle.get(COUNT_PREFIX + 'comments') or 0
 
         today_view = redis_handle.hget(COUNT_PREFIX + 'view', str(today)) or 0
         today_like = redis_handle.hget(COUNT_PREFIX + 'like', str(today)) or 0
