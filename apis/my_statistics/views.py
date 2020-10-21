@@ -20,10 +20,10 @@ class StatisticsView(APIView):
         total_user = redis_handle.get(COUNT_PREFIX + 'users')
         total_comment = redis_handle.get(COUNT_PREFIX + 'comments')
 
-        today_view = redis_handle.hget(COUNT_PREFIX + 'view', str(today))
-        today_like = redis_handle.hget(COUNT_PREFIX + 'like', str(today))
-        today_user = redis_handle.hget(COUNT_PREFIX + 'user', str(today))
-        today_comment = redis_handle.hget(COUNT_PREFIX + 'comment', str(today))
+        today_view = redis_handle.hget(COUNT_PREFIX + 'view', str(today)) or 0
+        today_like = redis_handle.hget(COUNT_PREFIX + 'like', str(today)) or 0
+        today_user = redis_handle.hget(COUNT_PREFIX + 'user', str(today)) or 0
+        today_comment = redis_handle.hget(COUNT_PREFIX + 'comment', str(today)) or 0
 
         everyday_view = redis_handle.hgetall(COUNT_PREFIX + 'view')
         everyday_like = redis_handle.hgetall(COUNT_PREFIX + 'like')
