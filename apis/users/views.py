@@ -1,11 +1,15 @@
+from datetime import date
+
 from rest_framework import mixins, viewsets, status
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework_jwt.serializers import jwt_payload_handler
 from rest_framework_jwt.utils import jwt_encode_handler
 
+from apis.utils.utils.other import redis_handle
 from .serializers import UserSerializer, UpdateUserSerializer
 from apis.utils.permissions import IsOwnerOrReadOnly
+from main.settings import COUNT_PREFIX
 
 User = get_user_model()
 
@@ -30,6 +34,9 @@ class RegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = ()
 
     def perform_create(self, serializer):
+        redis_handle.incr(COUNT_PREFIX + "users", amount=1)
+        today = date.today()
+        redis_handle.hincrby(COUNT_PREFIX + 'user', str(today), amount=1)
         return serializer.save()
 
     def create(self, request, *args, **kwargs):

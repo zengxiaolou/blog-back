@@ -13,7 +13,7 @@ from apis.operations.models import Comment, Reply
 from .serializers import LikeSerializer, CommentSerializer, ReplySerializer, CreateCommentSerializer, \
     CreateReplySerializer, CommentLikeSerializer
 from apis.utils.utils.other import redis_handle
-from main.settings import REDIS_PREFIX, USER_PREFIX, COMMENT_PREFIX
+from main.settings import REDIS_PREFIX, USER_PREFIX, COMMENT_PREFIX, COUNT_PREFIX
 from ..article.serialzers import ArchiveSerializer
 from ..utils.pagination import MyPageNumberPagination
 
@@ -32,6 +32,8 @@ class LikeViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
             redis_handle.zadd(REDIS_PREFIX + "article_like:" + str(kwargs['pk']), {request.user.id: 0})
             redis_handle.zadd(USER_PREFIX + 'like:' + str(request.user.id), {kwargs['pk']: 0})
             redis_handle.incr(REDIS_PREFIX + "total_like", amount=1)
+            today = datetime.date.today()
+            redis_handle.hincrby(COUNT_PREFIX + 'like', str(today), amount=1)
             data = {"result": '感谢点赞'}
         else:
             redis_handle.zrem(REDIS_PREFIX + "article_like:" + str(kwargs['pk']),  request.user.id)
@@ -75,6 +77,9 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets
 
     def perform_create(self, serializer):
         redis_handle.incr(REDIS_PREFIX + 'article_comment:' + str(serializer.validated_data['article'].id), amount=1)
+        redis_handle.incr(COUNT_PREFIX + 'comments', amount=1)
+        today = datetime.date.today()
+        redis_handle.hincrby(COUNT_PREFIX + 'comment', str(today), amount=1)
         serializer.save()
 
 
@@ -93,6 +98,9 @@ class ReplyViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.G
     serializer_class = CreateReplySerializer
 
     def perform_create(self, serializer):
+        redis_handle.incr(COUNT_PREFIX + 'comments', amount=1)
+        today = datetime.date.today()
+        redis_handle.hincrby(COUNT_PREFIX + 'comment', str(today), amount=1)
         redis_handle.incr(REDIS_PREFIX + 'article_comment:' + str(serializer.validated_data['comment'].article.id),
                           amount=1)
         serializer.save()

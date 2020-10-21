@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from django.db.models import Count
 from django_elasticsearch_dsl_drf.filter_backends import *
@@ -16,7 +17,7 @@ from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, Categor
     ArticleContentSerializer, ArticleCategoryTagsSerializer, ArticleTagSerializer
 from .models import Article, Category, Tags, ArticleDraft
 from apis.utils.utils.other import redis_handle
-from main.settings import REDIS_PREFIX
+from main.settings import REDIS_PREFIX, COUNT_PREFIX
 
 logger = logging.getLogger('django_log')
 
@@ -48,6 +49,8 @@ class ArticleDocumentView(BaseDocumentViewSet):
         serializer = self.get_serializer(instance)
         redis_handle.incr(REDIS_PREFIX + 'view:' + str(instance.id), amount=1)
         redis_handle.incr(REDIS_PREFIX + "total_view", amount=1)
+        today = date.today()
+        redis_handle.hincrby(COUNT_PREFIX + 'view', str(today), amount=1)
         return Response(serializer.data)
 
     def list(self, request, *args, **kwargs):

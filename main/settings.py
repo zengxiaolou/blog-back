@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'apis.utils',
     'apis.article',
     'apis.operations',
+    'apis.my_statistics',
     'rest_framework',
     'corsheaders',
     'drf_yasg',

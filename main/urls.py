@@ -41,4 +41,5 @@ urlpatterns = [
     url(r'^api/(?P<version>[v1|2]+)/utils/', include('apis.utils.urls')),
     url(r'^api/(?P<version>[v1|2]+)/article/', include('apis.article.urls')),
     url(r'^api/(?P<version>[v1|2]+)/operations/', include('apis.operations.urls')),
+    url(r'^api/(?P<version>[v1|2]+)/statistics/', include('apis.my_statistics.urls'))
 ]
