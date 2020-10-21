@@ -136,3 +136,4 @@ deployment/es/data/
 deployment/es/logs/
 
 art*.log
+art.log.*
