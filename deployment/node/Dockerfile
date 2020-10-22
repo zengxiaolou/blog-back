@@ -18,8 +18,8 @@ WORKDIR /work
 ADD . /work
 
 # 安装相关依赖
-RUN cnpm install express
-RUn cnpm install -g phantomjs-prebuilt
+RUN npm install express
+RUN npm install -g phantomjs-prebuilt
 
 # 设置环境变量
 ENV SPIDER=/work
