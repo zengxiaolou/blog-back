@@ -91,14 +91,14 @@ services:
       - es
     restart: always
 
-  spider:
-    build: deployment/node
-    ports:
-      - 3000:3000
-    volumes:
-        - ./deployment/node/:/work
-    command: node server.js
-    restart: always
+#  spider:
+#    build: deployment/node
+#    ports:
+#      - 3000:3000
+#    volumes:
+#        - ./deployment/node/:/work
+#    command: node server.js
+#    restart: always
 
   nginx:
     build: deployment/nginx
