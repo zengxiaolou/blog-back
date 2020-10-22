@@ -101,7 +101,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     avatar = serializers.CharField(max_length=300, min_length=10, required=False)
     password = serializers.CharField(max_length=10, min_length=8, write_only=True, required=False)
 
-
     @staticmethod
     def validate_password(password):
         """检查password"""

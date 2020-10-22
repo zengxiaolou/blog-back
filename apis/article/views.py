@@ -131,6 +131,16 @@ class AddArticleViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixi
         category.num += 1
         category.save()
         redis_handle.incr(REDIS_PREFIX + "total_article", amount=1)
+        tag = serializer.validated_data['tag']
+        for i in tag:
+            redis_handle.hincrby(COUNT_PREFIX + 'tag', i, amount=1)
+
+    def perform_update(self, serializer):
+        serializer.save()
+        tag = serializer.validated_data.get('tag', '')
+        if tag:
+            for i in tag:
+                redis_handle.hincrby(COUNT_PREFIX + 'tag', i, amount=1)
 
 
 class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
@@ -187,6 +197,10 @@ class TagViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.Gen
     permission_classes = ()
     serializer_class = TagsSerializer
     queryset = Tags.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
+        redis_handle.hset(COUNT_PREFIX + 'tag', serializer.validated_data['tag'], 0)
 
 
 class GetViewAndLikeView(APIView):
@@ -272,6 +286,13 @@ class ArticleUpdateTagViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     serializer_class = ArticleTagSerializer
     queryset = Article.objects.all()
 
+    def perform_update(self, serializer):
+        serializer.save()
+        tag = serializer.validated_data.get('tag', '')
+        if tag:
+            for i in tag:
+                redis_handle.hincrby(COUNT_PREFIX + 'tag', i, amount=1)
+
 
 class CheckTagExistView(APIView):
     """判断标签是否已经存在"""
@@ -286,5 +307,6 @@ class CheckTagExistView(APIView):
             if not tag:
                 tag = Tags(tag=tag_name)
                 tag.save()
+                redis_handle.hset(COUNT_PREFIX + 'tag', tag_name, 0)
             return Response({'results': tag.id}, status=status.HTTP_200_OK)
         return Response({'result': False}, status=status.HTTP_400_BAD_REQUEST)

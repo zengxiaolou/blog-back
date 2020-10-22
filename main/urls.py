@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^jwt/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'', include('social_django.urls', namespace='social')),
     url(r'^docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     url(r'^api/(?P<version>[v1|2]+)/user/', include('apis.users.urls')),
     url(r'^api/(?P<version>[v1|2]+)/utils/', include('apis.utils.urls')),
     url(r'^api/(?P<version>[v1|2]+)/article/', include('apis.article.urls')),

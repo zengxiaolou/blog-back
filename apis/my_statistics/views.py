@@ -1,9 +1,11 @@
 import datetime
 
-from rest_framework import status
+
+from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apis.article.models import Category
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX, COUNT_PREFIX
 
@@ -39,3 +41,12 @@ class StatisticsView(APIView):
         }
         return Response(data, status=status.HTTP_200_OK)
 
+
+class TagView(APIView):
+    """获取标签分布"""
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self, request, *args, **kwargs):
+        tags = redis_handle.hgetall(COUNT_PREFIX + 'tag')
+        return Response(tags, status=status.HTTP_200_OK)
