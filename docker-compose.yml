@@ -96,7 +96,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-        - .:/work
+        - ./deployment/node/:/work
     command: node server.js
     restart: always
 
