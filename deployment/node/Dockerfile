@@ -19,6 +19,7 @@ ADD . /work
 
 # 安装相关依赖
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN cnpm install pm2 -g
 RUN cnpm install -g express
 RUN cnpm install -g phantomjs-prebuilt
 
