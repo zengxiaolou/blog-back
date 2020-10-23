@@ -290,8 +290,7 @@ class ArticleUpdateTagViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         serializer.save()
         tag = serializer.validated_data.get('tag', '')
         if tag:
-            for i in tag:
-                redis_handle.hincrby(COUNT_PREFIX + 'tag', i, amount=1)
+            redis_handle.hincrby(COUNT_PREFIX + 'tag', tag[-1].tag, amount=1)
 
 
 class CheckTagExistView(APIView):
