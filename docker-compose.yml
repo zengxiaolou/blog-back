@@ -97,7 +97,7 @@ services:
       - 8081:8081
     volumes:
         - ./deployment/node/:/work
-    command: PM2 start server.js
+    command: node server.js
     restart: always
 
   nginx:
