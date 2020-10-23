@@ -20,8 +20,9 @@ ADD . /work
 # 安装相关依赖
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
 RUN cnpm install pm2 -g
-RUN cnpm install -g express
+RUN cnpm install -g express-generator
 RUN cnpm install -g phantomjs-prebuilt
+RUN cnpm install
 
 # 设置环境变量
 ENV SPIDER=/work
