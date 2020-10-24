@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from apis.article.models import Article
 from apis.operations.models import Comment, Reply
 from .serializers import LikeSerializer, CommentSerializer, ReplySerializer, CreateCommentSerializer, \
-    CreateReplySerializer, CommentLikeSerializer
+    CreateReplySerializer, CommentLikeSerializer, SubscribeSerializer
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX, USER_PREFIX, COMMENT_PREFIX, COUNT_PREFIX
 from ..article.serialzers import ArchiveSerializer
@@ -139,3 +139,12 @@ class CommentLikeViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, view
         comment_id = kwargs['pk']
         redis_handle.zrem(COMMENT_PREFIX + 'like:' + str(comment_id), self.request.user.id)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EmailViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """订阅邮箱"""
+
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_class = SubscribeSerializer
+

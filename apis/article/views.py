@@ -18,6 +18,8 @@ from .serialzers import ArticleDocumentSerializer, AddArticleSerializer, Categor
 from .models import Article, Category, Tags, ArticleDraft
 from apis.utils.utils.other import redis_handle
 from main.settings import REDIS_PREFIX, COUNT_PREFIX
+from .tasks import send_mails
+from ..operations.models import Subscribe
 
 logger = logging.getLogger('django_log')
 
@@ -127,20 +129,22 @@ class AddArticleViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixi
 
     def perform_create(self, serializer):
         serializer.save()
+        send_mails.delay(theme='订阅通知', title=serializer.instance.title, url='http://blog.messstack.com/detail/' +
+                         str(serializer.instance.id) + '/')
         category = serializer.validated_data["category"]
         category.num += 1
         category.save()
         redis_handle.incr(REDIS_PREFIX + "total_article", amount=1)
         tag = serializer.validated_data['tag']
         for i in tag:
-            redis_handle.hincrby(COUNT_PREFIX + 'tag', i, amount=1)
+            redis_handle.hincrby(COUNT_PREFIX + 'tag', i.tag, amount=1)
 
     def perform_update(self, serializer):
         serializer.save()
         tag = serializer.validated_data.get('tag', '')
         if tag:
             for i in tag:
-                redis_handle.hincrby(COUNT_PREFIX + 'tag', i, amount=1)
+                redis_handle.hincrby(COUNT_PREFIX + 'tag', i.tag, amount=1)
 
 
 class SaveArticleDraftViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,

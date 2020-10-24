@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 
 from apis.article.models import Article
 from apis.article.serialzers import ArchiveSerializer
-from apis.operations.models import Comment, Reply
+from apis.operations.models import Comment, Reply, Subscribe
 
 user = get_user_model()
 
@@ -73,3 +73,12 @@ class CreateReplySerializer(serializers.ModelSerializer):
 class CommentLikeSerializer(serializers.Serializer):
     """用户点赞评论"""
     comment_id = serializers.IntegerField(required=True)
+
+
+class SubscribeSerializer(serializers.ModelSerializer):
+    """订阅邮箱"""
+
+    class Meta:
+        model = Subscribe
+        fields = ('email',)
+

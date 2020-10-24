@@ -36,3 +36,11 @@ class Reply(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
+class Subscribe(models.Model):
+    """订阅邮箱"""
+    email = models.EmailField(verbose_name='订阅邮箱', unique=True)
+
+    def __str__(self):
+        return self.email
