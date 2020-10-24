@@ -15,6 +15,10 @@ import sys
 import datetime
 import logging
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
 from main.keys import JWT_KEY, KEY_EMAIL_HOST_USER, KEY_EMAIL_HOST_PASSWORD, KEY_QINIU_ACCESS_KEY, \
     KEY_QINIU_SECRET_KEY, KEY_QINIU_BUCKET_NAME, KEY_SOCIAL_AUTH_GITHUB_KEY, KEY_SOCIAL_AUTH_GITHUB_SECRET,\
     TENCENT_SECRETID, TENCENT_SECRETKEY, TENCENT_SMSSDKAPPID, TENCENT_SIGN, TENCENT_TEMPLATEID
@@ -303,3 +307,14 @@ SOCIAL_AUTH_PIPELINE = (
 
 SOCIAL_AUTH_GITHUB_KEY = KEY_SOCIAL_AUTH_GITHUB_KEY
 SOCIAL_AUTH_GITHUB_SECRET = KEY_SOCIAL_AUTH_GITHUB_SECRET
+
+
+sentry_sdk.init(
+    dsn="http://a488b392f75d49f381dd7b2def938b9f@154.91.197.66:9000/2",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
